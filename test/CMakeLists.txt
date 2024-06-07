@@ -16,7 +16,7 @@ ENDIF( LIBCITYGML_DYNAMIC )
 # INCLUDE_DIRECTORIES( ${CITYGML_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/../sources/include ${CMAKE_BINARY_DIR}/sources/include)
 
-SET( PRG_SRCS citygmltest.cpp )
+SET( PRG_SRCS citygmltest.cpp MyLogger.cpp )
 
 ADD_EXECUTABLE( citygmltest ${PRG_SRCS} )
 
