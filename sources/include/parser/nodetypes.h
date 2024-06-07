@@ -44,6 +44,8 @@ namespace citygml {
         NODETYPE( CORE, CreationDate )
         NODETYPE( CORE, TerminationDate )
         NODETYPE( CORE, GeneralizesTo)
+        NODETYPE( CORE, Boundary)
+        NODETYPE( CORE, PointCloud)
 
         NODETYPE( CORE, ExternalReference)
         NODETYPE( CORE, InformationSystem)
@@ -76,6 +78,7 @@ namespace citygml {
         NODETYPE( GEN, Function )
         NODETYPE( GEN, Usage )
         NODETYPE( GEN, GenericCityObject )
+        NODETYPE( GEN, GenericOccupiedSpace )
         NODETYPE( GEN, StringAttribute )
         NODETYPE( GEN, DoubleAttribute )
         NODETYPE( GEN, IntAttribute )
@@ -179,6 +182,9 @@ namespace citygml {
         NODETYPE( BLDG, RoomInstallation)
         NODETYPE( BLDG, Opening)
         NODETYPE( BLDG, RoofType)
+        NODETYPE( BLDG, BuildingSubdivision)
+        NODETYPE( BLDG, Storey)
+        NODETYPE( BLDG, BuildingRoom)
         
         NODETYPE( BLDG, Lod0FootPrint )
         NODETYPE( BLDG, Lod0RoofEdge )
