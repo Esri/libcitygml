@@ -73,8 +73,9 @@ namespace citygml {
         const Geometry& getGeometry( unsigned int i ) const;
         Geometry& getGeometry( unsigned int i );
         void addGeometry(Geometry* geom);
-        void pushIntermediateNode(const IntermediateGeometryNode& node, bool toBack = true);
-        std::deque<IntermediateGeometryNode> getNodeStack() const;
+        void pushIntermediateNode(const IntermediateGeometryNode& node, const std::string& parentId, bool toBack = true);
+        std::string getPreviousParentId(std::string currentParentId, std::shared_ptr<citygml::CityGMLLogger> logger) const; 
+        std::string getNodeStackPath(const std::string& startNodeId, std::shared_ptr<citygml::CityGMLLogger> logger) const;
         GeometryType getType() const;
 
         std::string getTypeAsString() const;
@@ -111,7 +112,8 @@ namespace citygml {
 
         std::string m_srsName;
 
-        std::deque<IntermediateGeometryNode> m_NodeStack;
+        // Keyed on parent ids
+        std::map<std::string, std::deque<IntermediateGeometryNode>> m_NodeStack;
 
         std::vector<std::shared_ptr<Geometry> > m_childGeometries;
 

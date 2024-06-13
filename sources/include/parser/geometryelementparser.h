@@ -34,6 +34,7 @@ namespace citygml {
         int m_lodLevel;
         CityObject::CityObjectsType m_parentType;
         std::string m_orientation;
+        std::string m_currentParentId;
     };
 
 }

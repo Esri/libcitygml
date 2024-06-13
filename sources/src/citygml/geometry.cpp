@@ -87,22 +87,81 @@ namespace citygml {
     {
         m_childGeometries.push_back(std::unique_ptr<Geometry>(geom));
     }
-
-    void Geometry::pushIntermediateNode(const IntermediateGeometryNode& node, bool toBack)
+    
+    std::string Geometry::getPreviousParentId(std::string currentParentId, std::shared_ptr<citygml::CityGMLLogger> logger) const
     {
+        for (auto& pair : m_NodeStack)
+        {
+            if (std::find_if(pair.second.begin(), pair.second.end(), 
+                [currentParentId](const IntermediateGeometryNode& node) 
+                { return currentParentId == node.id(); }) != pair.second.end())
+                return pair.first;
+        }
+
+        CITYGML_LOG_ERROR(logger, "Failed to find parent id of " + currentParentId);
+        return currentParentId;
+    }
+
+    std::string Geometry::getNodeStackPath(const std::string& startNodeId, std::shared_ptr<citygml::CityGMLLogger> logger) const
+    {
+        // searches up from the input id to the root
+        std::string pathToRoot = "";
+        std::string currentId = startNodeId;
+        
+        while (!currentId.empty() || currentId == "root")
+        {
+            std::string parentId = getPreviousParentId(currentId, logger);
+
+            // Now look for the details of the node from the parent
+            auto parentChildren = m_NodeStack.at(parentId);
+            auto nodeIt = std::find_if(parentChildren.begin(), parentChildren.end(), [currentId](const IntermediateGeometryNode& node) {
+                return node.id() == currentId;
+            });
+            if (nodeIt != parentChildren.end())
+            {
+                // Found the node in the parent's children
+                std::string idBlock = nodeIt->id().empty() ? "" : "[" + nodeIt->id() + "]";
+                pathToRoot = nodeIt->name() + idBlock + "\\" + pathToRoot;
+                currentId = parentId;
+            }
+            else
+            {
+                // force search to end
+                currentId = "";
+            }
+        }
+
+        return pathToRoot;
+    }
+
+    void Geometry::pushIntermediateNode(const IntermediateGeometryNode& node, const std::string& parentId, bool toBack)
+    {
+        if(m_NodeStack.find(parentId) == m_NodeStack.end())
+            m_NodeStack.insert(std::make_pair(parentId, std::deque<citygml::IntermediateGeometryNode>()));
+
+        // if replacing the root then root elements are moved to become children of the new element
+        if (parentId == "root")
+        {
+            if (m_NodeStack.find(node.id()) == m_NodeStack.end())
+                m_NodeStack.insert(std::make_pair(node.id(), std::deque<citygml::IntermediateGeometryNode>()));
+
+            auto rootElements = m_NodeStack.at("root");
+            for (auto& rootElement : rootElements)
+            {
+                m_NodeStack.at(node.id()).push_back(rootElement);
+            }
+
+            m_NodeStack.at("root").clear();
+        }
+
         if (toBack)
         {
-            m_NodeStack.push_back(node);
+            m_NodeStack.at(parentId).push_back(node);
         }
         else
         {
-            m_NodeStack.push_front(node);
+            m_NodeStack.at(parentId).push_front(node);
         }
-    }
-
-    std::deque<IntermediateGeometryNode> Geometry::getNodeStack() const
-    {
-        return m_NodeStack;
     }
 
     Geometry::GeometryType Geometry::getType() const
