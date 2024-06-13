@@ -82,7 +82,7 @@ namespace citygml {
 
         m_model = m_factory.createGeometry(attributes.getCityGMLIDAttribute(), m_parentType, m_lodLevel, srsName);
         IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), attributes.getAttribute("gml:id"));
-        m_model->pushIntermediateNode(intermediateNode, false);
+        m_model->pushIntermediateNode(intermediateNode);
         m_orientation = attributes.getAttribute("orientation", "+"); // A gml:OrientableSurface may define a negative orientation
         return true;
 
@@ -109,7 +109,7 @@ namespace citygml {
         }
 
         IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), attributes.getAttribute("gml:id"));
-        m_model->pushIntermediateNode(intermediateNode, false);
+        m_model->pushIntermediateNode(intermediateNode);
 
         if (node == NodeType::GML_InteriorNode
          || node == NodeType::GML_ExteriorNode
