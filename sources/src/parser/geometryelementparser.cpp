@@ -33,6 +33,7 @@ namespace citygml {
         m_callback = callback;
         m_lodLevel = lodLevel;
         m_parentType = parentType;
+        m_currentParentId = "root";
     }
 
     std::string GeometryElementParser::elementParserName() const
@@ -81,8 +82,10 @@ namespace citygml {
         std::string srsName = attributes.getAttribute("srsName");
 
         m_model = m_factory.createGeometry(attributes.getCityGMLIDAttribute(), m_parentType, m_lodLevel, srsName);
-        IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), attributes.getAttribute("gml:id"));
-        m_model->pushIntermediateNode(intermediateNode);
+        std::string nodeId = attributes.getCityGMLIDAttribute();
+        IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), nodeId);
+        m_model->pushIntermediateNode(intermediateNode, m_currentParentId);
+        m_currentParentId = nodeId;
         m_orientation = attributes.getAttribute("orientation", "+"); // A gml:OrientableSurface may define a negative orientation
         return true;
 
@@ -108,9 +111,10 @@ namespace citygml {
             throw std::runtime_error("GeometryElementParser::parseChildElementStartTag called before GeometryElementParser::parseElementStartTag");
         }
 
-        IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), attributes.getAttribute("gml:id"));
-        m_model->pushIntermediateNode(intermediateNode);
-
+        std::string nodeId = attributes.getCityGMLIDAttribute();
+        IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), nodeId);
+        m_model->pushIntermediateNode(intermediateNode, m_currentParentId);
+        m_currentParentId = nodeId;
         if (node == NodeType::GML_InteriorNode
          || node == NodeType::GML_ExteriorNode
          || node == NodeType::GML_SolidMemberNode) {
@@ -128,7 +132,9 @@ namespace citygml {
             } else {
                 std::vector<ElementParser*> parsers;
 
-                std::function<void(std::shared_ptr<Polygon>)> callback1 = [this](std::shared_ptr<Polygon> poly) {m_model->addPolygon(poly);};
+                std::function<void(std::shared_ptr<Polygon>)> callback1 = [this](std::shared_ptr<Polygon> poly) {
+                    m_model->addPolygon(poly);
+                };
                 std::function<void(Geometry*)>                callback2 = [this](Geometry* child) {m_model->addGeometry(child);};
 
                 parsers.push_back(new PolygonElementParser(m_documentParser, m_factory, m_logger, callback1));
@@ -156,6 +162,12 @@ namespace citygml {
 
         if (m_model == nullptr) {
             throw std::runtime_error("GeometryElementParser::parseChildElementEndTag called before GeometryElementParser::parseElementStartTag");
+        }
+
+        auto parentId = m_model->getPreviousParentId(m_currentParentId, m_logger);
+        if (!parentId.empty())
+        {
+            m_currentParentId = parentId;
         }
 
         if (node == NodeType::GML_InteriorNode

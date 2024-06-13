@@ -680,12 +680,12 @@ namespace citygml {
     
     void CityObjectElementParser::parseGeometryForLODLevel(const citygml::NodeType::XMLNode& node, int lod, CityObject::CityObjectsType parentType, const Attributes& attributes)
     {
-        std::string nodeId = attributes.getAttribute("gml:id", "");
+        std::string nodeId = attributes.getCityGMLIDAttribute();
         setParserForNextElement(new GeometryElementParser(m_documentParser, m_factory, m_logger, lod, parentType, [this, node, nodeId](Geometry* geom) {
             m_model->addGeometry(geom);
             // Need to push to back as this is the top level tag of the geometry
             IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), nodeId);
-            geom->pushIntermediateNode(intermediateNode, false);
+            geom->pushIntermediateNode(intermediateNode, "root", false);
         }));
     }
     
