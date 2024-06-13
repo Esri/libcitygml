@@ -49,8 +49,8 @@ namespace citygml {
         static std::unordered_map<int, AttributeType> attributeTypeMap;
         static bool attributesSetInitialized;
 
-        void parseGeometryForLODLevel(int lod);
-        void parseGeometryForLODLevel(int lod, CityObject::CityObjectsType parentType);
+        void parseGeometryForLODLevel(const citygml::NodeType::XMLNode& node, int lod, const Attributes& attributes);
+        void parseGeometryForLODLevel(const citygml::NodeType::XMLNode& node, int lod, CityObject::CityObjectsType parentType, const Attributes& attributes);
         void parseImplicitGeometryForLODLevel(int lod);
         void parseGeometryPropertyElementForLODLevel(int lod, const std::string& id);
     };
