@@ -7,6 +7,26 @@
 
 namespace citygml {
 
+    const std::string& IntermediateGeometryNode::id() const
+    {
+        return m_id;
+    }
+
+    const std::string IntermediateGeometryNode::name() const
+    {
+        return m_prefix + ":" + m_name;
+    }
+
+    const std::string& IntermediateGeometryNode::prefix() const
+    {
+        return m_prefix;
+    }
+
+    const std::string& IntermediateGeometryNode::baseName() const
+    {
+        return m_name;
+    }
+
     Geometry::Geometry(const std::string& id, Geometry::GeometryType type, unsigned int lod, std::string srsName)
         : AppearanceTarget( id ), m_finished(false), m_type( type ), m_lod( lod ), m_srsName( srsName )
     {
@@ -66,6 +86,23 @@ namespace citygml {
     void Geometry::addGeometry(Geometry* geom)
     {
         m_childGeometries.push_back(std::unique_ptr<Geometry>(geom));
+    }
+
+    void Geometry::pushIntermediateNode(const IntermediateGeometryNode& node, bool toBack)
+    {
+        if (toBack)
+        {
+            m_NodeStack.push_back(node);
+        }
+        else
+        {
+            m_NodeStack.push_front(node);
+        }
+    }
+
+    std::deque<IntermediateGeometryNode> Geometry::getNodeStack() const
+    {
+        return m_NodeStack;
     }
 
     Geometry::GeometryType Geometry::getType() const

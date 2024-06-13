@@ -81,6 +81,8 @@ namespace citygml {
         std::string srsName = attributes.getAttribute("srsName");
 
         m_model = m_factory.createGeometry(attributes.getCityGMLIDAttribute(), m_parentType, m_lodLevel, srsName);
+        IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), attributes.getAttribute("gml:id"));
+        m_model->pushIntermediateNode(intermediateNode, false);
         m_orientation = attributes.getAttribute("orientation", "+"); // A gml:OrientableSurface may define a negative orientation
         return true;
 
@@ -105,6 +107,9 @@ namespace citygml {
         if (m_model == nullptr) {
             throw std::runtime_error("GeometryElementParser::parseChildElementStartTag called before GeometryElementParser::parseElementStartTag");
         }
+
+        IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), attributes.getAttribute("gml:id"));
+        m_model->pushIntermediateNode(intermediateNode, false);
 
         if (node == NodeType::GML_InteriorNode
          || node == NodeType::GML_ExteriorNode
