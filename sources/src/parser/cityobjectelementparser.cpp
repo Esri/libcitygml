@@ -413,22 +413,22 @@ namespace citygml {
             
             std::string lod = m_model->getAttribute("dem:lod");
             if (!lod.empty()) {
-                parseGeometryForLODLevel(std::stoi(lod));
+                parseGeometryForLODLevel(node, std::stoi(lod), attributes);
             } else {
-                parseGeometryForLODLevel(0);
+                parseGeometryForLODLevel(node, 0, attributes);
             }
         } else if (node == NodeType::GEN_Lod0TerrainIntersectionNode
                    || node == NodeType::WTR_Lod0MultiCurveNode
                    || node == NodeType::WTR_Lod0MultiSurfaceNode
                    || node == NodeType::CORE_Lod0MultiSurfaceNode) {
             
-            parseGeometryForLODLevel(0);
+            parseGeometryForLODLevel(node, 0, attributes);
         } else if (node == NodeType::BLDG_Lod0FootPrintNode) {
             // for Lod0 footprint, we must explicitly set the City Object Type, because the parent type is "Building", and it doesn't allow to discriminate between the ground and roof surface
-            parseGeometryForLODLevel(0, CityObject::CityObjectsType::COT_GroundSurface);
+            parseGeometryForLODLevel(node, 0, CityObject::CityObjectsType::COT_GroundSurface, attributes);
         } else if (node == NodeType::BLDG_Lod0RoofEdgeNode) {
             // for Lod0 roof edge, we must explicitly set the City Object Type, because the parent type is "Building", and it doesn't allow to discriminate between the ground and roof surface
-            parseGeometryForLODLevel(0, CityObject::CityObjectsType::COT_RoofSurface);
+            parseGeometryForLODLevel(node, 0, CityObject::CityObjectsType::COT_RoofSurface, attributes);
         } else if (node == NodeType::BLDG_Lod1MultiCurveNode
                    || node == NodeType::BLDG_Lod1MultiSurfaceNode
                    || node == NodeType::BRID_Lod1MultiSurfaceNode
@@ -445,7 +445,7 @@ namespace citygml {
                    || node == NodeType::CORE_Lod1MultiSurfaceNode
                    || node == NodeType::WTR_Lod1SolidNode) {
 
-            parseGeometryForLODLevel(1);
+            parseGeometryForLODLevel(node, 1, attributes);
         } else if (node == NodeType::BLDG_Lod2MultiCurveNode
                    || node == NodeType::BLDG_Lod2MultiSurfaceNode
                    || node == NodeType::BRID_Lod2MultiSurfaceNode
@@ -471,7 +471,7 @@ namespace citygml {
                    || node == NodeType::CORE_Lod2SolidNode
                    || node == NodeType::CORE_Lod3SolidNode) {
 
-            parseGeometryForLODLevel(2);
+            parseGeometryForLODLevel(node, 2, attributes);
         } else if (node == NodeType::BLDG_Lod3MultiCurveNode
                    || node == NodeType::BLDG_Lod3MultiSurfaceNode
                    || node == NodeType::BRID_Lod3MultiSurfaceNode
@@ -486,7 +486,7 @@ namespace citygml {
                    || node == NodeType::WTR_Lod3SolidNode
                    || node == NodeType::WTR_Lod3SurfaceNode) {
 
-            parseGeometryForLODLevel(3);
+            parseGeometryForLODLevel(node, 3, attributes);
         } else if (node == NodeType::BLDG_Lod4MultiCurveNode
                    || node == NodeType::BLDG_Lod4SolidNode
                    || node == NodeType::VEG_Lod4MultiSurfaceNode
@@ -501,7 +501,7 @@ namespace citygml {
                    || node == NodeType::WTR_Lod4SolidNode
                    || node == NodeType::WTR_Lod4SurfaceNode) {
 
-            parseGeometryForLODLevel(4);
+            parseGeometryForLODLevel(node, 4, attributes);
         } else if (node == NodeType::GEN_Lod0GeometryNode) {
             parseGeometryPropertyElementForLODLevel(0, attributes.getCityGMLIDAttribute());
         }
@@ -798,16 +798,20 @@ namespace citygml {
         return m_model;
     }
     
-    void CityObjectElementParser::parseGeometryForLODLevel(int lod, CityObject::CityObjectsType parentType)
+    void CityObjectElementParser::parseGeometryForLODLevel(const citygml::NodeType::XMLNode& node, int lod, CityObject::CityObjectsType parentType, const Attributes& attributes)
     {
-        setParserForNextElement(new GeometryElementParser(m_documentParser, m_factory, m_logger, lod, parentType, [this](Geometry* geom) {
+        std::string nodeId = attributes.getAttribute("gml:id", "");
+        setParserForNextElement(new GeometryElementParser(m_documentParser, m_factory, m_logger, lod, parentType, [this, node, nodeId](Geometry* geom) {
             m_model->addGeometry(geom);
+            // Need to push to back as this is the top level tag of the geometry
+            IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), nodeId);
+            geom->pushIntermediateNode(intermediateNode, false);
         }));
     }
     
-    void CityObjectElementParser::parseGeometryForLODLevel(int lod)
+    void CityObjectElementParser::parseGeometryForLODLevel(const citygml::NodeType::XMLNode& node, int lod, const Attributes& attributes)
     {
-        parseGeometryForLODLevel(lod, m_model->getType());
+        parseGeometryForLODLevel(node, lod, m_model->getType(), attributes);
     }
 
     void CityObjectElementParser::parseImplicitGeometryForLODLevel(int lod)
