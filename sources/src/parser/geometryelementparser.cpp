@@ -168,7 +168,11 @@ namespace citygml {
             throw std::runtime_error("GeometryElementParser::parseChildElementEndTag called before GeometryElementParser::parseElementStartTag");
         }
 
-        m_currentParentId = m_model->getPreviousParentId(m_currentParentId, m_logger);
+        auto parentId = m_model->getPreviousParentId(m_currentParentId, m_logger);
+        if (!parentId.empty())
+        {
+            m_currentParentId = parentId;
+        }
 
         if (node == NodeType::GML_InteriorNode
          || node == NodeType::GML_ExteriorNode

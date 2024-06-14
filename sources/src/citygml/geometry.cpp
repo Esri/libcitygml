@@ -98,8 +98,13 @@ namespace citygml {
                 return pair.first;
         }
 
-        CITYGML_LOG_ERROR(logger, "Failed to find parent id of " + currentParentId);
-        return currentParentId;
+        if (currentParentId != "root")
+        {
+            CITYGML_LOG_ERROR(logger, "Failed to find parent id of " + currentParentId);
+            return currentParentId;
+        }
+        
+        return "";
     }
 
     std::string Geometry::getNodeStackPath(const std::string& startNodeId, std::shared_ptr<citygml::CityGMLLogger> logger) const
@@ -111,6 +116,8 @@ namespace citygml {
         while (!currentId.empty() || currentId == "root")
         {
             std::string parentId = getPreviousParentId(currentId, logger);
+            if (parentId.empty())
+                return pathToRoot;
 
             // Now look for the details of the node from the parent
             auto parentChildren = m_NodeStack.at(parentId);
