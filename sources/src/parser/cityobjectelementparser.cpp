@@ -295,6 +295,7 @@ namespace citygml {
                    || node == NodeType::BLDG_InteriorRoomNode
                    || node == NodeType::BLDG_OpeningNode
                    || node == NodeType::BLDG_ConsistsOfBuildingPartNode
+                   || node == NodeType::BLDG_BuildingPartNode
                    || node == NodeType::BLDG_BuildingSubdivisionNode
                    || node == NodeType::BLDG_StoreyNode
                    || node == NodeType::BLDG_BuildingRoomNode
