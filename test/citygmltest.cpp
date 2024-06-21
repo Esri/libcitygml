@@ -23,7 +23,6 @@
 #include <citygml/cityobject.h>
 #include <citygml/geometry.h>
 #include <citygml/implictgeometry.h>
-#include "MyLogger.h"
 
 #ifdef LIBCITYGML_USE_OPENGL
 #include <citygml/tesselator.h>
@@ -86,14 +85,13 @@ int main( int argc, char **argv )
 #else
 
     std::shared_ptr<const citygml::CityModel> city;
-    std::shared_ptr<citygml::CityGMLLogger> logger = std::make_shared<MyLogger>(citygml::CityGMLLogger::LOGLEVEL::LL_DEBUG);
 #ifdef LIBCITYGML_USE_OPENGL
     std::unique_ptr<TesselatorBase> tesselator = std::unique_ptr<TesselatorBase>(new Tesselator(nullptr));
 #else
     std::unique_ptr<TesselatorBase> tesselator = nullptr;
 #endif // LIBCITYGML_USE_OPENGL
     try{
-        city = citygml::load( argv[fargc], params, std::move(tesselator), logger);
+        city = citygml::load( argv[fargc], params, std::move(tesselator));
     }catch(const std::runtime_error& e){
         
     }
