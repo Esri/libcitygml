@@ -133,10 +133,6 @@ namespace citygml {
                 std::vector<ElementParser*> parsers;
 
                 std::function<void(std::shared_ptr<Polygon>)> callback1 = [this](std::shared_ptr<Polygon> poly) {
-                    std::string nodeStackPath = m_model->getNodeStackPath(m_currentParentId, m_logger);
-                    std::string idBlock = poly->getId().empty() ? "" : "[" + poly->getId() + "]";
-                    std::string pathToRoot = nodeStackPath + "gml:Polygon" + idBlock + "\\";
-                    poly->setNodeStackPath(pathToRoot);
                     m_model->addPolygon(poly);
                 };
                 std::function<void(Geometry*)>                callback2 = [this](Geometry* child) {m_model->addGeometry(child);};

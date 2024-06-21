@@ -100,16 +100,6 @@ namespace citygml {
             return m_interiorRings;
         }
 
-        void setNodeStackPath(const std::string& nodeStackPath)
-        {
-            m_nodeStackPath = nodeStackPath;
-        }
-
-        std::string getNodeStackPath() const
-        {
-            return m_nodeStackPath;
-        }
-
         virtual ~Polygon();
 
     protected:
@@ -138,7 +128,6 @@ namespace citygml {
 
         std::shared_ptr<LinearRing> m_exteriorRing;
         std::vector<std::shared_ptr<LinearRing> > m_interiorRings;
-        std::string m_nodeStackPath;
 
         bool m_negNormal;
         bool m_finished;
