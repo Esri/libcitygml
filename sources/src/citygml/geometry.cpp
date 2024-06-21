@@ -5,6 +5,8 @@
 #include <citygml/appearance.h>
 #include <citygml/citygmllogger.h>
 
+#include <algorithm>
+
 namespace citygml {
 
     const std::string& IntermediateGeometryNode::id() const
