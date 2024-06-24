@@ -1,5 +1,7 @@
 #include "parser/textureelementparser.h"
 
+#include "parser/textureassociationelementparser.h"
+
 #include <unordered_map>
 
 #include "parser/nodetypes.h"
@@ -83,6 +85,11 @@ namespace citygml {
             } else {
                 m_currentTexCoords = std::make_shared<TextureCoordinates>(attributes.getCityGMLIDAttribute(), parseReference(attributes.getAttribute("ring"), m_logger, getDocumentLocation()));
             }
+
+            return true;
+        }
+        else if (node == NodeType::APP_TextureParameterizationNode) {
+            setParserForNextElement(new TextureAssociationElementParser(m_documentParser, m_factory, m_logger, m_model));
             return true;
         }
 
@@ -101,6 +108,9 @@ namespace citygml {
         } else if (node == NodeType::APP_TextureTypeNode) {
 
             m_model->setAttribute(node.name(), characters);
+        }
+        else if (node == NodeType::APP_TextureParameterizationNode) {
+            // Do nothing (target and texture coords are set in child element)
         } else if (node == NodeType::APP_WrapModeNode) {
 
             if (!m_model->setWrapModeFromString(characters)) {
