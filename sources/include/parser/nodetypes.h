@@ -79,6 +79,10 @@ namespace citygml {
         NODETYPE( GEN, Usage )
         NODETYPE( GEN, GenericCityObject )
         NODETYPE( GEN, GenericOccupiedSpace )
+        NODETYPE( GEN, GenericUnoccupiedSpace)
+        NODETYPE( GEN, GenericLogicalSpace)
+        NODETYPE( GEN, GenericThematicSurface)
+        
         NODETYPE( GEN, StringAttribute )
         NODETYPE( GEN, DoubleAttribute )
         NODETYPE( GEN, IntAttribute )
@@ -101,6 +105,16 @@ namespace citygml {
         NODETYPE( GEN, Lod2ImplicitRepresentation )
         NODETYPE( GEN, Lod3ImplicitRepresentation )
         NODETYPE( GEN, Lod4ImplicitRepresentation )
+        NODETYPE( GEN, Lod0MultiCurve)
+        NODETYPE( GEN, Lod2MultiCurve)
+        NODETYPE( GEN, Lod3MultiCurve)
+        NODETYPE( GEN, Lod0MultiSurface)
+        NODETYPE( GEN, Lod2MultiSurface)
+        NODETYPE( GEN, Lod3MultiSurface)
+
+        NODETYPE( GEN, Area)
+        NODETYPE( GEN, SpaceType)
+        NODETYPE( GEN, Volume)
 
         // TEX
         // NODETYPE( GML, TexturedSurface ) // Deprecated
@@ -184,6 +198,7 @@ namespace citygml {
         NODETYPE( BLDG, RoofType)
         NODETYPE( BLDG, BuildingSubdivision)
         NODETYPE( BLDG, Storey)
+        NODETYPE( BLDG, BuildingConstructiveElement)
         NODETYPE( BLDG, BuildingRoom)
         
         NODETYPE( BLDG, Lod0FootPrint )
@@ -305,14 +320,20 @@ namespace citygml {
         NODETYPE( TRANS, TransportationComplex )
         NODETYPE( TRANS, TrafficArea )
         NODETYPE( TRANS, AuxiliaryTrafficArea )
+        NODETYPE( TRANS, TrafficSpace)
+        NODETYPE( TRANS, AuxiliaryTrafficSpace)
         NODETYPE( TRANS, Track )
         NODETYPE( TRANS, Road )
         NODETYPE( TRANS, Railway )
         NODETYPE( TRANS, Square )
+        NODETYPE( TRANS, Intersection)
+        NODETYPE( TRANS, Section)
+        NODETYPE( TRANS, Waterway)
 
         NODETYPE( TRANS, Usage )
         NODETYPE( TRANS, Function )
         NODETYPE( TRANS, SurfaceMaterial )
+        NODETYPE( TRANS, Granularity)
 
         NODETYPE( TRANS, Lod0Network )
         NODETYPE( TRANS, Lod1MultiSurface )

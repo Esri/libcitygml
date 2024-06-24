@@ -57,11 +57,16 @@ namespace citygml {
             if (!typeIDTypeMapInitialized) {
                 typeIDTypeMap.insert(HANDLE_TYPE(GEN, GenericCityObject));
                 typeIDTypeMap.insert(HANDLE_TYPE(GEN, GenericOccupiedSpace));
+                typeIDTypeMap.insert(HANDLE_TYPE(GEN, GenericUnoccupiedSpace));
+                typeIDTypeMap.insert(HANDLE_TYPE(GEN, GenericLogicalSpace));
+                typeIDTypeMap.insert(HANDLE_TYPE(GEN, GenericThematicSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(BLDG, Building));
                 typeIDTypeMap.insert(HANDLE_TYPE(BLDG, BuildingPart));
                 typeIDTypeMap.insert(HANDLE_TYPE(BLDG, Room));
                 typeIDTypeMap.insert(HANDLE_TYPE(BLDG, BuildingInstallation));
                 typeIDTypeMap.insert(HANDLE_TYPE(BLDG, BuildingFurniture));
+                typeIDTypeMap.insert(HANDLE_TYPE(BLDG, BuildingConstructiveElement));
+                typeIDTypeMap.insert(HANDLE_TYPE(BLDG, BuildingRoom));
                 typeIDTypeMap.insert(HANDLE_TYPE(BLDG, Door));
                 typeIDTypeMap.insert(HANDLE_TYPE(BLDG, Window));
                 typeIDTypeMap.insert(HANDLE_TYPE(BLDG, CityFurniture));
@@ -74,9 +79,14 @@ namespace citygml {
                 typeIDTypeMap.insert(HANDLE_TYPE(TRANS, Road));
                 typeIDTypeMap.insert(HANDLE_TYPE(TRANS, Railway));
                 typeIDTypeMap.insert(HANDLE_TYPE(TRANS, Square));
+                typeIDTypeMap.insert(HANDLE_TYPE(TRANS, Intersection));
+                typeIDTypeMap.insert(HANDLE_TYPE(TRANS, Section));
+                typeIDTypeMap.insert(HANDLE_TYPE(TRANS, Waterway));
                 typeIDTypeMap.insert(HANDLE_GROUP_TYPE(TRANS, TransportationComplex, CityObject::CityObjectsType::COT_TransportationObject));
                 typeIDTypeMap.insert(HANDLE_GROUP_TYPE(TRANS, TrafficArea, CityObject::CityObjectsType::COT_TransportationObject));
                 typeIDTypeMap.insert(HANDLE_GROUP_TYPE(TRANS, AuxiliaryTrafficArea, CityObject::CityObjectsType::COT_TransportationObject));
+                typeIDTypeMap.insert(HANDLE_TYPE(TRANS, TrafficSpace));
+                typeIDTypeMap.insert(HANDLE_TYPE(TRANS, AuxiliaryTrafficSpace));
                 typeIDTypeMap.insert(HANDLE_TYPE(VEG, PlantCover));
                 typeIDTypeMap.insert(HANDLE_TYPE(VEG, SolitaryVegetationObject));
                 typeIDTypeMap.insert(HANDLE_TYPE(WTR, WaterBody));
@@ -145,6 +155,9 @@ namespace citygml {
                 attributesSet.insert(HANDLE_ATTR(GRP, Class));
                 attributesSet.insert(HANDLE_ATTR(GRP, Function));
                 attributesSet.insert(HANDLE_ATTR(GRP, Usage));
+                attributesSet.insert(HANDLE_ATTR(GEN, Area));
+                attributesSet.insert(HANDLE_ATTR(GEN, SpaceType));
+                attributesSet.insert(HANDLE_ATTR(GEN, Volume));
                 attributesSet.insert(HANDLE_ATTR(GEN, Class));
                 attributesSet.insert(HANDLE_ATTR(GEN, Function));
                 attributesSet.insert(HANDLE_ATTR(GEN, Usage));
@@ -155,6 +168,7 @@ namespace citygml {
                 attributesSet.insert(HANDLE_ATTR(TRANS, Usage));
                 attributesSet.insert(HANDLE_ATTR(TRANS, Function));
                 attributesSet.insert(HANDLE_ATTR(TRANS, SurfaceMaterial));
+                attributesSet.insert(HANDLE_ATTR(TRANS, Granularity));
                 attributesSet.insert(HANDLE_ATTR(WTR, Class));
                 attributesSet.insert(HANDLE_ATTR(WTR, Function));
                 attributesSet.insert(HANDLE_ATTR(WTR, Usage));
@@ -167,6 +181,9 @@ namespace citygml {
                 attributeTypeMap[HANDLE_ATTR(BLDG, Class)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(BLDG, Function)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(BLDG, Usage)] = AttributeType::String;
+                attributeTypeMap[HANDLE_ATTR(GEN, Area)] = AttributeType::String;
+                attributeTypeMap[HANDLE_ATTR(GEN, SpaceType)] = AttributeType::String;
+                attributeTypeMap[HANDLE_ATTR(GEN, Volume)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(BLDG, YearOfConstruction)] = AttributeType::Date;
                 attributeTypeMap[HANDLE_ATTR(BLDG, YearOfDemolition)] = AttributeType::Date;
                 attributeTypeMap[HANDLE_ATTR(BLDG, StoreyHeightsAboveGround)] = AttributeType::Double;
@@ -197,6 +214,7 @@ namespace citygml {
                 attributeTypeMap[HANDLE_ATTR(TRANS, Usage)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(TRANS, Function)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(TRANS, SurfaceMaterial)] = AttributeType::String;
+                attributeTypeMap[HANDLE_ATTR(TRANS, Granularity)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(WTR, Class)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(WTR, Function)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(WTR, Usage)] = AttributeType::String;
@@ -296,6 +314,8 @@ namespace citygml {
                    || node == NodeType::BLDG_OpeningNode
                    || node == NodeType::BLDG_ConsistsOfBuildingPartNode
                    || node == NodeType::BLDG_BuildingPartNode
+                   || node == NodeType::BLDG_BuildingConstructiveElementNode
+                   || node == NodeType::BLDG_BuildingRoomNode
                    || node == NodeType::BLDG_BuildingSubdivisionNode
                    || node == NodeType::BLDG_StoreyNode
                    || node == NodeType::BLDG_BuildingRoomNode
@@ -303,6 +323,11 @@ namespace citygml {
                    || node == NodeType::GRP_ParentNode
                    || node == NodeType::TRANS_TrafficAreaNode
                    || node == NodeType::TRANS_AuxiliaryTrafficAreaNode
+                   || node == NodeType::TRANS_TrafficSpaceNode
+                   || node == NodeType::TRANS_AuxiliaryTrafficSpaceNode
+                   || node == NodeType::TRANS_IntersectionNode
+                   || node == NodeType::TRANS_SectionNode
+                   || node == NodeType::TRANS_WaterwayNode
                    || node == NodeType::WTR_BoundedByNode
                    || node == NodeType::DEM_ReliefComponentNode
                    || node == NodeType::DEM_TINReliefNode
@@ -311,9 +336,12 @@ namespace citygml {
                    || node == NodeType::DEM_RasterReliefNode
                    || node == NodeType::DEM_GridNode
                    || node == NodeType::CORE_GeneralizesToNode
+                   || node == NodeType::GEN_GenericOccupiedSpaceNode
+                   || node == NodeType::GEN_GenericUnoccupiedSpaceNode
+                   || node == NodeType::GEN_GenericLogicalSpaceNode
+                   || node == NodeType::GEN_GenericThematicSurfaceNode
                    || node == NodeType::CORE_BoundaryNode
-                   || node == NodeType::CORE_PointCloudNode
-                   || node == NodeType::GEN_GenericOccupiedSpaceNode) {
+                   || node == NodeType::CORE_PointCloudNode) {
             setParserForNextElement(new CityObjectElementParser(m_documentParser, m_factory, m_logger, [this](CityObject* obj) {
                                         m_model->addChildCityObject(obj);
                                     }));
@@ -361,7 +389,13 @@ namespace citygml {
                    || node == NodeType::LUSE_Lod2MultiSurfaceNode
                    || node == NodeType::TRANS_Lod2MultiSurfaceNode
                    || node == NodeType::WTR_Lod2SolidNode
-                   || node == NodeType::WTR_Lod2SurfaceNode) {
+                   || node == NodeType::WTR_Lod2SurfaceNode
+                   || node == NodeType::GEN_Lod0MultiCurveNode
+                   || node == NodeType::GEN_Lod2MultiCurveNode
+                   || node == NodeType::GEN_Lod3MultiCurveNode
+                   || node == NodeType::GEN_Lod0MultiSurfaceNode
+                   || node == NodeType::GEN_Lod2MultiSurfaceNode
+                   || node == NodeType::GEN_Lod3MultiSurfaceNode) {
 
             parseGeometryForLODLevel(node, 2, attributes);
         } else if (node == NodeType::BLDG_Lod3MultiCurveNode
@@ -521,6 +555,8 @@ namespace citygml {
                     || node == NodeType::BLDG_Lod4MultiSurfaceNode
                     || node == NodeType::BLDG_Lod4SolidNode
                     || node == NodeType::BLDG_Lod4TerrainIntersectionNode
+                    || node == NodeType::BLDG_BuildingPartNode
+                    || node == NodeType::BLDG_BuildingConstructiveElementNode
                     || node == NodeType::BLDG_BuildingSubdivisionNode
                     || node == NodeType::BLDG_StoreyNode
                     || node == NodeType::BLDG_BuildingRoomNode
@@ -580,6 +616,11 @@ namespace citygml {
                     || node == NodeType::TRANS_Lod0NetworkNode
                     || node == NodeType::TRANS_TrafficAreaNode
                     || node == NodeType::TRANS_AuxiliaryTrafficAreaNode
+                    || node == NodeType::TRANS_TrafficSpaceNode
+                    || node == NodeType::TRANS_AuxiliaryTrafficSpaceNode
+                    || node == NodeType::TRANS_IntersectionNode
+                    || node == NodeType::TRANS_SectionNode
+                    || node == NodeType::TRANS_WaterwayNode
                     || node == NodeType::TRANS_Lod1MultiSurfaceNode
                     || node == NodeType::TRANS_Lod2MultiSurfaceNode
                     || node == NodeType::TRANS_Lod3MultiSurfaceNode
@@ -598,7 +639,18 @@ namespace citygml {
                     || node == NodeType::WTR_BoundedByNode
                     || node == NodeType::BLDG_AddressNode
                     || node == NodeType::CORE_AddressNode
-                    || node == NodeType::CORE_XalAddressNode) {
+                    || node == NodeType::CORE_XalAddressNode
+                    || node == NodeType::GEN_GenericOccupiedSpaceNode
+                    || node == NodeType::GEN_GenericUnoccupiedSpaceNode
+                    || node == NodeType::GEN_GenericLogicalSpaceNode
+                    || node == NodeType::GEN_GenericThematicSurfaceNode
+                    || node == NodeType::GEN_Lod0MultiCurveNode
+                    || node == NodeType::GEN_Lod2MultiCurveNode
+                    || node == NodeType::GEN_Lod3MultiCurveNode
+                    || node == NodeType::GEN_Lod0MultiSurfaceNode
+                    || node == NodeType::GEN_Lod2MultiSurfaceNode
+                    || node == NodeType::GEN_Lod3MultiSurfaceNode
+                    || node == NodeType::CORE_BoundaryNode) {
 
             return true;
         }
