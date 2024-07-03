@@ -169,10 +169,6 @@ namespace citygml {
             return "BuildingInstallation";
         case CityObject::CityObjectsType::COT_BuildingFurniture:
             return "BuildingFurniture";
-        case CityObject::CityObjectsType::COT_BuildingConstructiveElement:
-            return "BuildingConstructiveElement";
-        case CityObject::CityObjectsType::COT_BuildingRoom:
-            return "BuildingRoom";
         case CityObject::CityObjectsType::COT_Door:
             return "Door";
         case CityObject::CityObjectsType::COT_Window:
@@ -187,12 +183,6 @@ namespace citygml {
             return "Railway";
         case CityObject::CityObjectsType::COT_Square:
             return "Square";
-        case CityObject::CityObjectsType::COT_Intersection:
-            return "Intersection";
-        case CityObject::CityObjectsType::COT_Section:
-            return "Section";
-        case CityObject::CityObjectsType::COT_Waterway:
-            return "Waterway";
         case CityObject::CityObjectsType::COT_PlantCover:
             return "PlantCover";
         case CityObject::CityObjectsType::COT_SolitaryVegetationObject:
@@ -201,6 +191,16 @@ namespace citygml {
             return "WaterBody";
         case CityObject::CityObjectsType::COT_ReliefFeature:
             return "ReliefFeature";
+        case CityObject::CityObjectsType::COT_ReliefComponent:
+            return "ReliefComponent";
+        case CityObject::CityObjectsType::COT_TINRelief:
+            return "TINRelief";
+        case CityObject::CityObjectsType::COT_MassPointRelief:
+            return "MassPointRelief";
+        case CityObject::CityObjectsType::COT_BreaklineRelief:
+            return "BreaklineRelief";
+        case CityObject::CityObjectsType::COT_RasterRelief:
+            return "RasterRelief";
         case CityObject::CityObjectsType::COT_LandUse:
             return "LandUse";
         case CityObject::CityObjectsType::COT_Tunnel:
@@ -229,6 +229,8 @@ namespace citygml {
             return "InteriorWallSurface";
         case CityObject::CityObjectsType::COT_CeilingSurface:
             return "CeilingSurface";
+        case CityObject::CityObjectsType::COT_CityObjectGroup:
+            return "CityObjectGroup";
         case CityObject::CityObjectsType::COT_OuterCeilingSurface:
             return "OuterCeilingSurface";
         case CityObject::CityObjectsType::COT_OuterFloorSurface:
@@ -236,13 +238,35 @@ namespace citygml {
         case CityObject::CityObjectsType::COT_TransportationObject:
             return "TransportationObject";
         case CityObject::CityObjectsType::COT_IntBuildingInstallation:
-	    return "IntBuildingInstallation";
+            return "IntBuildingInstallation";
         case CityObject::CityObjectsType::COT_GenericOccupiedSpace:
             return "GenericOccupiedSpace";
         case CityObject::CityObjectsType::COT_GenericUnoccupiedSpace:
             return "GenericUnoccupiedSpace";
         case CityObject::CityObjectsType::COT_GenericLogicalSpace:
             return "GenericLogicalSpace";
+        case CityObject::CityObjectsType::COT_GenericThematicSurface:
+            return "GenericThematicSurface";
+        case CityObject::CityObjectsType::COT_TrafficSpace:
+            return "TrafficSpace";
+        case CityObject::CityObjectsType::COT_AuxiliaryTrafficSpace:
+            return "AuxiliaryTrafficSpace";
+        case CityObject::CityObjectsType::COT_Intersection:
+            return "Intersection";
+        case CityObject::CityObjectsType::COT_Section:
+            return "Section";
+        case CityObject::CityObjectsType::COT_Waterway:
+            return "Waterway";
+        case CityObject::CityObjectsType::COT_BuildingConstructiveElement:
+            return "BuildingConstructiveElement";
+        case CityObject::CityObjectsType::COT_BuildingRoom:
+            return "BuildingRoom";
+        case CityObject::CityObjectsType::COT_BuildingSubdivision:
+            return "BuildingSubdivision";
+        case CityObject::CityObjectsType::COT_Storey:
+            return "Storey";
+        case CityObject::CityObjectsType::COT_PointCloud:
+            return "PointCloud";
         default:
             return "Unknown";
         }
