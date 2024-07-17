@@ -89,6 +89,7 @@ SET(SOURCES
   src/citygml/address.cpp
   src/citygml/rectifiedgridcoverage.cpp
   src/citygml/externalreference.cpp
+  src/citygml/intermediateNode.cpp
 
   src/parser/nodetypes.cpp
   src/parser/attributes.cpp
@@ -166,6 +167,7 @@ SET(PUBLIC_HEADER
   include/citygml/rectifiedgridcoverage.h
   include/citygml/externalreference.h
   include/citygml/warnings.h
+  include/citygml/intermediateNode.h
 )
 
 

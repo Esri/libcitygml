@@ -9,26 +9,6 @@
 
 namespace citygml {
 
-    const std::string& IntermediateGeometryNode::id() const
-    {
-        return m_id;
-    }
-
-    const std::string IntermediateGeometryNode::name() const
-    {
-        return m_prefix + ":" + m_name;
-    }
-
-    const std::string& IntermediateGeometryNode::prefix() const
-    {
-        return m_prefix;
-    }
-
-    const std::string& IntermediateGeometryNode::baseName() const
-    {
-        return m_name;
-    }
-
     Geometry::Geometry(const std::string& id, Geometry::GeometryType type, unsigned int lod, std::string srsName)
         : AppearanceTarget( id ), m_finished(false), m_type( type ), m_lod( lod ), m_srsName( srsName )
     {
@@ -95,7 +75,7 @@ namespace citygml {
         for (auto& pair : m_NodeStack)
         {
             if (std::find_if(pair.second.begin(), pair.second.end(), 
-                [currentParentId](const IntermediateGeometryNode& node) 
+                [currentParentId](const IntermediateNode& node) 
                 { return currentParentId == node.id(); }) != pair.second.end())
                 return pair.first;
         }
@@ -123,7 +103,7 @@ namespace citygml {
 
             // Now look for the details of the node from the parent
             auto parentChildren = m_NodeStack.at(parentId);
-            auto nodeIt = std::find_if(parentChildren.begin(), parentChildren.end(), [currentId](const IntermediateGeometryNode& node) {
+            auto nodeIt = std::find_if(parentChildren.begin(), parentChildren.end(), [currentId](const IntermediateNode& node) {
                 return node.id() == currentId;
             });
             if (nodeIt != parentChildren.end())
@@ -143,16 +123,16 @@ namespace citygml {
         return pathToRoot;
     }
 
-    void Geometry::pushIntermediateNode(const IntermediateGeometryNode& node, const std::string& parentId, bool toBack)
+    void Geometry::pushIntermediateNode(const IntermediateNode& node, const std::string& parentId, bool toBack)
     {
         if(m_NodeStack.find(parentId) == m_NodeStack.end())
-            m_NodeStack.insert(std::make_pair(parentId, std::deque<citygml::IntermediateGeometryNode>()));
+            m_NodeStack.insert(std::make_pair(parentId, std::deque<citygml::IntermediateNode>()));
 
         // if replacing the root then root elements are moved to become children of the new element
         if (parentId == "root")
         {
             if (m_NodeStack.find(node.id()) == m_NodeStack.end())
-                m_NodeStack.insert(std::make_pair(node.id(), std::deque<citygml::IntermediateGeometryNode>()));
+                m_NodeStack.insert(std::make_pair(node.id(), std::deque<citygml::IntermediateNode>()));
 
             auto rootElements = m_NodeStack.at("root");
             for (auto& rootElement : rootElements)
