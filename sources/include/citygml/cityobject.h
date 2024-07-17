@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <deque>
 
 #include <citygml/featureobject.h>
 #include <citygml/citygml_api.h>
@@ -20,6 +21,7 @@ namespace citygml {
     class CityGMLLogger;
     class AppearanceManager;
     class Address;
+    class IntermediateNode;
 
     class LIBCITYGML_EXPORT CityObject : public FeatureObject
     {
@@ -123,6 +125,10 @@ namespace citygml {
 
         void addChildCityObject(CityObject* cityObj);
 
+        void pushIntermediateNode(const IntermediateNode& node, const std::string& parentId, bool toBack = true);
+        std::string getPreviousParentId(std::string currentParentId, std::shared_ptr<citygml::CityGMLLogger> logger) const;
+        std::string getNodeStackPath(const std::string& startNodeId, std::shared_ptr<citygml::CityGMLLogger> logger) const;
+
         // Access address
         const Address* address() const;
         void setAddress(std::unique_ptr<Address>&& address);
@@ -148,6 +154,9 @@ namespace citygml {
         std::unique_ptr<Address> m_address;
         std::unique_ptr<RectifiedGridCoverage> m_rectifiedGridCoverage;
         std::unique_ptr<ExternalReference> m_externalReference;
+
+        // Keyed on parent ids
+        std::map<std::string, std::deque<IntermediateNode>> m_NodeStack;
     };
 
     LIBCITYGML_EXPORT std::ostream& operator<<( std::ostream& os, const CityObject& o );

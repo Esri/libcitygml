@@ -19,26 +19,7 @@ namespace citygml {
     class ParserParams;
     class CityGMLFactory;
     class CityGMLLogger;
-
-    class LIBCITYGML_EXPORT IntermediateGeometryNode
-    {
-    public:
-        IntermediateGeometryNode(std::string prefix, std::string name, std::string id)
-            : m_prefix(prefix), m_name(name), m_id(id)
-        {
-
-        }
-
-        const std::string& id() const;
-        const std::string name() const;
-        const std::string& prefix() const;
-        const std::string& baseName() const;
-
-    private:
-        std::string m_prefix;
-        std::string m_name;
-        std::string m_id;
-    };
+    class IntermediateNode;
 
     class LIBCITYGML_EXPORT Geometry : public AppearanceTarget
     {
@@ -73,7 +54,7 @@ namespace citygml {
         const Geometry& getGeometry( unsigned int i ) const;
         Geometry& getGeometry( unsigned int i );
         void addGeometry(Geometry* geom);
-        void pushIntermediateNode(const IntermediateGeometryNode& node, const std::string& parentId, bool toBack = true);
+        void pushIntermediateNode(const IntermediateNode& node, const std::string& parentId, bool toBack = true);
         std::string getPreviousParentId(std::string currentParentId, std::shared_ptr<citygml::CityGMLLogger> logger) const; 
         std::string getNodeStackPath(const std::string& startNodeId, std::shared_ptr<citygml::CityGMLLogger> logger) const;
         GeometryType getType() const;
@@ -113,7 +94,7 @@ namespace citygml {
         std::string m_srsName;
 
         // Keyed on parent ids
-        std::map<std::string, std::deque<IntermediateGeometryNode>> m_NodeStack;
+        std::map<std::string, std::deque<IntermediateNode>> m_NodeStack;
 
         std::vector<std::shared_ptr<Geometry> > m_childGeometries;
 
