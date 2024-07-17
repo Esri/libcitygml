@@ -66,7 +66,7 @@ namespace citygml {
 
     void CityObject::addImplictGeometry(ImplicitGeometry* implictGeom)
     {
-        m_implicitGeometries.push_back(std::unique_ptr<ImplicitGeometry>(implictGeom));
+		m_implicitGeometries.push_back(std::unique_ptr<ImplicitGeometry>(implictGeom));
     }
 
     unsigned int CityObject::getChildCityObjectsCount() const
@@ -86,7 +86,11 @@ namespace citygml {
 
     void CityObject::addChildCityObject(CityObject* cityObj)
     {
-        m_children.push_back(std::unique_ptr<CityObject>(cityObj));
+		// don't add empty nodes as children
+		if(cityObj!=NULL)
+		{
+            m_children.push_back(std::unique_ptr<CityObject>(cityObj));
+		}
     }
 
     const Address* CityObject::address() const
@@ -170,6 +174,10 @@ namespace citygml {
             return "BuildingInstallation";
         case CityObject::CityObjectsType::COT_BuildingFurniture:
             return "BuildingFurniture";
+        case CityObject::CityObjectsType::COT_BuildingConstructiveElement:
+            return "BuildingConstructiveElement";
+        case CityObject::CityObjectsType::COT_BuildingRoom:
+            return "BuildingRoom";
         case CityObject::CityObjectsType::COT_Door:
             return "Door";
         case CityObject::CityObjectsType::COT_Window:
@@ -184,6 +192,12 @@ namespace citygml {
             return "Railway";
         case CityObject::CityObjectsType::COT_Square:
             return "Square";
+        case CityObject::CityObjectsType::COT_Intersection:
+            return "Intersection";
+        case CityObject::CityObjectsType::COT_Section:
+            return "Section";
+        case CityObject::CityObjectsType::COT_Waterway:
+            return "Waterway";
         case CityObject::CityObjectsType::COT_PlantCover:
             return "PlantCover";
         case CityObject::CityObjectsType::COT_SolitaryVegetationObject:
@@ -252,16 +266,6 @@ namespace citygml {
             return "TrafficSpace";
         case CityObject::CityObjectsType::COT_AuxiliaryTrafficSpace:
             return "AuxiliaryTrafficSpace";
-        case CityObject::CityObjectsType::COT_Intersection:
-            return "Intersection";
-        case CityObject::CityObjectsType::COT_Section:
-            return "Section";
-        case CityObject::CityObjectsType::COT_Waterway:
-            return "Waterway";
-        case CityObject::CityObjectsType::COT_BuildingConstructiveElement:
-            return "BuildingConstructiveElement";
-        case CityObject::CityObjectsType::COT_BuildingRoom:
-            return "BuildingRoom";
         case CityObject::CityObjectsType::COT_BuildingSubdivision:
             return "BuildingSubdivision";
         case CityObject::CityObjectsType::COT_Storey:
@@ -318,7 +322,7 @@ namespace citygml {
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_OuterCeilingSurface), CityObject::CityObjectsType::COT_OuterCeilingSurface},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_OuterFloorSurface), CityObject::CityObjectsType::COT_OuterFloorSurface},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_TransportationObject), CityObject::CityObjectsType::COT_TransportationObject},
-         {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_IntBuildingInstallation), CityObject::CityObjectsType::COT_IntBuildingInstallation},
+	     {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_IntBuildingInstallation), CityObject::CityObjectsType::COT_IntBuildingInstallation},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_GenericOccupiedSpace), CityObject::CityObjectsType::COT_GenericOccupiedSpace},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_GenericUnoccupiedSpace), CityObject::CityObjectsType::COT_GenericUnoccupiedSpace},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_GenericLogicalSpace), CityObject::CityObjectsType::COT_GenericLogicalSpace}

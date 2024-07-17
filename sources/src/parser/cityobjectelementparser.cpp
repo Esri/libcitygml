@@ -43,6 +43,7 @@ namespace citygml {
     {
         m_callback = callback;
         m_currentParentId = "root";
+		m_model = nullptr;
     }
 
     std::string CityObjectElementParser::elementParserName() const
@@ -101,6 +102,9 @@ namespace citygml {
                 typeIDTypeMap.insert(HANDLE_TYPE(BRID, BridgeConstructionElement));
                 typeIDTypeMap.insert(HANDLE_TYPE(BRID, BridgeInstallation));
                 typeIDTypeMap.insert(HANDLE_TYPE(BRID, BridgePart));
+                typeIDTypeMap.insert(HANDLE_TYPE(CON, FillingSurface));
+                typeIDTypeMap.insert(HANDLE_TYPE(CON, WindowSurface));
+                typeIDTypeMap.insert(HANDLE_TYPE(CON, DoorSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(BLDG, WallSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(BLDG, RoofSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(BLDG, GroundSurface));
@@ -163,6 +167,9 @@ namespace citygml {
                 attributesSet.insert(HANDLE_ATTR(GEN, Class));
                 attributesSet.insert(HANDLE_ATTR(GEN, Function));
                 attributesSet.insert(HANDLE_ATTR(GEN, Usage));
+                attributesSet.insert(HANDLE_ATTR(GEN, Area));
+                attributesSet.insert(HANDLE_ATTR(GEN, SpaceType));
+                attributesSet.insert(HANDLE_ATTR(GEN, Volume));
                 attributesSet.insert(HANDLE_ATTR(LUSE, Class));
                 attributesSet.insert(HANDLE_ATTR(LUSE, Function));
                 attributesSet.insert(HANDLE_ATTR(LUSE, Usage));
@@ -209,6 +216,9 @@ namespace citygml {
                 attributeTypeMap[HANDLE_ATTR(GEN, Class)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(GEN, Function)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(GEN, Usage)] = AttributeType::String;
+                attributeTypeMap[HANDLE_ATTR(GEN, Area)] = AttributeType::String;
+                attributeTypeMap[HANDLE_ATTR(GEN, SpaceType)] = AttributeType::String;
+                attributeTypeMap[HANDLE_ATTR(GEN, Volume)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(LUSE, Class)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(LUSE, Function)] = AttributeType::String;
                 attributeTypeMap[HANDLE_ATTR(LUSE, Usage)] = AttributeType::String;
@@ -326,7 +336,7 @@ namespace citygml {
                    || node == NodeType::BLDG_BuildingRoomNode
                    || node == NodeType::BLDG_BuildingSubdivisionNode
                    || node == NodeType::BLDG_StoreyNode
-                   || node == NodeType::BLDG_BuildingRoomNode
+                   || node == NodeType::BLDG_BuildingInstallationNode
                    || node == NodeType::GRP_GroupMemberNode
                    || node == NodeType::GRP_ParentNode
                    || node == NodeType::TRANS_TrafficAreaNode
@@ -349,7 +359,10 @@ namespace citygml {
                    || node == NodeType::GEN_GenericLogicalSpaceNode
                    || node == NodeType::GEN_GenericThematicSurfaceNode
                    || node == NodeType::CORE_BoundaryNode
-                   || node == NodeType::CORE_PointCloudNode) {
+                   || node == NodeType::CORE_PointCloudNode
+                   || node == NodeType::CON_FillingSurfaceNode
+                   || node == NodeType::CON_WindowSurfaceNode
+                   || node == NodeType::CON_DoorSurfaceNode) {
 
             std::string nodeId = attributes.getCityGMLIDAttribute();
             setParserForNextElement(new CityObjectElementParser(m_documentParser, m_factory, m_logger, [this, node, nodeId](CityObject* obj) {
@@ -366,8 +379,12 @@ namespace citygml {
                    || node == NodeType::DEM_ReliefPointsNode
                    || node == NodeType::DEM_RidgeOrValleyLinesNode
                    || node == NodeType::DEM_BreaklinesNode) {
-            
-            parseGeometryForLODLevel(node, std::stoi(m_model->getAttribute("dem:lod")), attributes);
+            std::string lod = m_model->getAttribute("dem:lod");
+            if (!lod.empty()) {
+                parseGeometryForLODLevel(node, std::stoi(lod), attributes);
+            } else {
+                parseGeometryForLODLevel(node, 0, attributes);
+            }
         } else if (node == NodeType::GEN_Lod0TerrainIntersectionNode
                    || node == NodeType::WTR_Lod0MultiCurveNode
                    || node == NodeType::WTR_Lod0MultiSurfaceNode) {
@@ -572,6 +589,10 @@ namespace citygml {
                     || node == NodeType::BLDG_BuildingSubdivisionNode
                     || node == NodeType::BLDG_StoreyNode
                     || node == NodeType::BLDG_BuildingRoomNode
+                    || node == NodeType::BLDG_BuildingInstallationNode
+                    || node == NodeType::CON_FillingSurfaceNode
+                    || node == NodeType::CON_WindowSurfaceNode
+                    || node == NodeType::CON_DoorSurfaceNode
                     || node == NodeType::GEN_Lod1GeometryNode
                     || node == NodeType::GEN_Lod2GeometryNode
                     || node == NodeType::GEN_Lod3GeometryNode
