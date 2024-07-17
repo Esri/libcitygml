@@ -13,6 +13,7 @@
 #include <citygml/citygmlfactory.h>
 #include <citygml/citygmllogger.h>
 #include <citygml/polygon.h>
+#include <citygml/intermediateNode.h>
 
 #include <mutex>
 
@@ -83,7 +84,7 @@ namespace citygml {
 
         m_model = m_factory.createGeometry(attributes.getCityGMLIDAttribute(), m_parentType, m_lodLevel, srsName);
         std::string nodeId = attributes.getCityGMLIDAttribute();
-        IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), nodeId);
+        IntermediateNode intermediateNode(node.prefix(), node.baseName(), nodeId);
         m_model->pushIntermediateNode(intermediateNode, m_currentParentId);
         m_currentParentId = nodeId;
         m_orientation = attributes.getAttribute("orientation", "+"); // A gml:OrientableSurface may define a negative orientation
@@ -112,7 +113,7 @@ namespace citygml {
         }
 
         std::string nodeId = attributes.getCityGMLIDAttribute();
-        IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), nodeId);
+        IntermediateNode intermediateNode(node.prefix(), node.baseName(), nodeId);
         m_model->pushIntermediateNode(intermediateNode, m_currentParentId);
         m_currentParentId = nodeId;
         if (node == NodeType::GML_InteriorNode

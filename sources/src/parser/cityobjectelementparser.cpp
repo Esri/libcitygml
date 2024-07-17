@@ -17,6 +17,7 @@
 #include <citygml/citygmlfactory.h>
 #include <citygml/citygmllogger.h>
 #include <citygml/address.h>
+#include <citygml/intermediateNode.h>
 
 #include <stdexcept>
 #include <iostream>
@@ -45,6 +46,7 @@ namespace citygml {
     {
         m_callback = callback;
 		m_model = nullptr;
+        m_currentParentId = "root";
     }
 
     std::string CityObjectElementParser::elementParserName() const
@@ -294,6 +296,12 @@ namespace citygml {
         auto const type = static_cast<CityObject::CityObjectsType>(it->second);
         if (m_typeMask.test(static_cast<size_t>(type))) {
             m_model = m_factory.createCityObject(attributes.getCityGMLIDAttribute(), type);
+
+            std::string nodeId = attributes.getCityGMLIDAttribute();
+            IntermediateNode intermediateNode(node.prefix(), node.baseName(), nodeId);
+            m_model->pushIntermediateNode(intermediateNode, m_currentParentId);
+            m_currentParentId = nodeId;
+
             return true;
         } else {
             m_skipped = true;//skipUnknownOrUnexpectedElement(node.name());//m_skipped = true;
@@ -398,8 +406,11 @@ namespace citygml {
                    || node == NodeType::BRID_BridgeInstallationNode
                    || node == NodeType::BRID_BridgePartNode
                    || node == NodeType::BRID_BoundedByNode) {
-            setParserForNextElement(new CityObjectElementParser(m_documentParser, m_factory, m_logger, [this](CityObject* obj) {
+            std::string nodeId = attributes.getCityGMLIDAttribute();
+            setParserForNextElement(new CityObjectElementParser(m_documentParser, m_factory, m_logger, [this, node, nodeId](CityObject* obj) {
                                         m_model->addChildCityObject(obj);
+                                        IntermediateNode intermediateNode(node.prefix(), node.baseName(), nodeId);
+                                        obj->pushIntermediateNode(intermediateNode, "root", false);
                                     }));
         } else if (node == NodeType::APP_AppearanceNode // Compatibility with CityGML 1.0 (in CityGML 2 CityObjects can only contain appearanceMember elements)
                    || node == NodeType::APP_AppearanceMemberNode) {
@@ -804,7 +815,7 @@ namespace citygml {
         setParserForNextElement(new GeometryElementParser(m_documentParser, m_factory, m_logger, lod, parentType, [this, node, nodeId](Geometry* geom) {
             m_model->addGeometry(geom);
             // Need to push to back as this is the top level tag of the geometry
-            IntermediateGeometryNode intermediateNode(node.prefix(), node.baseName(), nodeId);
+            IntermediateNode intermediateNode(node.prefix(), node.baseName(), nodeId);
             geom->pushIntermediateNode(intermediateNode, "root", false);
         }));
     }
