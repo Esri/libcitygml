@@ -4,7 +4,6 @@
 #include <citygml/appearancemanager.h>
 #include <citygml/appearance.h>
 #include <citygml/citygmllogger.h>
-#include <citygml/intermediateNode.h>
 
 #include <algorithm>
 

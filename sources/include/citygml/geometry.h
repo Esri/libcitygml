@@ -7,6 +7,7 @@
 
 #include <citygml/citygml_api.h>
 #include <citygml/appearancetarget.h>
+#include <citygml/intermediateNode.h>
 
 class TesselatorBase;
 
@@ -19,7 +20,6 @@ namespace citygml {
     class ParserParams;
     class CityGMLFactory;
     class CityGMLLogger;
-    class IntermediateNode;
 
     class LIBCITYGML_EXPORT Geometry : public AppearanceTarget
     {
