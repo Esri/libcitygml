@@ -105,6 +105,7 @@ namespace citygml {
                 INITIALIZE_NODE( CORE, ReferencePoint)
                 INITIALIZE_NODE( CORE, MimeType)
                 INITIALIZE_NODE( CORE, LibraryObject)
+                INITIALIZE_NODE( CORE, GenericAttribute)
 
                 INITIALIZE_NODE( CORE, Boundary)
                 INITIALIZE_NODE( CORE, RelativeGeometry)
@@ -135,6 +136,7 @@ namespace citygml {
                 INITIALIZE_NODE( GEN, IntAttribute )
                 INITIALIZE_NODE( GEN, DateAttribute )
                 INITIALIZE_NODE( GEN, UriAttribute )
+                INITIALIZE_NODE(GEN, Name )
                 INITIALIZE_NODE( GEN, Value )
 
                 INITIALIZE_NODE( GEN, Lod0Geometry )
@@ -527,6 +529,7 @@ namespace citygml {
     DEFINE_NODE( CORE, ReferencePoint)
     DEFINE_NODE( CORE, MimeType)
     DEFINE_NODE( CORE, LibraryObject)
+    DEFINE_NODE( CORE, GenericAttribute)
 
     DEFINE_NODE( CORE, Boundary)
     DEFINE_NODE( CORE, RelativeGeometry)
@@ -550,6 +553,7 @@ namespace citygml {
     DEFINE_NODE( GEN, IntAttribute )
     DEFINE_NODE( GEN, DateAttribute )
     DEFINE_NODE( GEN, UriAttribute )
+    DEFINE_NODE( GEN, Name )
     DEFINE_NODE( GEN, Value )
 
     DEFINE_NODE( GEN, Lod0Geometry )

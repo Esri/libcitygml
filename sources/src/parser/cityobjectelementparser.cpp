@@ -39,7 +39,7 @@ namespace citygml {
 
     CityObjectElementParser::CityObjectElementParser(CityGMLDocumentParser& documentParser, CityGMLFactory& factory, std::shared_ptr<CityGMLLogger> logger, std::function<void (CityObject*)> callback)
         : GMLFeatureCollectionElementParser(documentParser, factory, logger)
-        , m_lastAttributeType(AttributeType::String)
+        , m_lastAttributeType(AttributeType::String), m_lastGenericAttributeType(AttributeType::String)
     {
         m_callback = callback;
         m_currentParentId = "root";
@@ -249,6 +249,8 @@ namespace citygml {
             return AttributeType::Date;
         } else if (node == NodeType::GEN_UriAttributeNode) {
             return AttributeType::Uri;
+        } else if (node == NodeType::CORE_GenericAttributeNode) {
+            return AttributeType::Generic;
         } else {
             // fallback to string for other types
             return AttributeType::String;
@@ -305,15 +307,28 @@ namespace citygml {
             throw std::runtime_error("CityObjectElementParser::parseChildElementStartTag called before CityObjectElementParser::parseElementStartTag");
         }
 
-        if (    node == NodeType::GEN_StringAttributeNode
-             || node == NodeType::GEN_DoubleAttributeNode
-             || node == NodeType::GEN_IntAttributeNode
-             || node == NodeType::GEN_DateAttributeNode
-             || node == NodeType::GEN_UriAttributeNode) {
+        if (node == NodeType::GEN_StringAttributeNode
+            || node == NodeType::GEN_DoubleAttributeNode
+            || node == NodeType::GEN_IntAttributeNode
+            || node == NodeType::GEN_DateAttributeNode
+            || node == NodeType::GEN_UriAttributeNode) {
 
-            m_lastAttributeName = attributes.getAttribute("name");
+            if (m_lastAttributeType == AttributeType::Generic)
+            {
+                m_lastGenericAttributeType = getAttributeType(node);
+            }
+            else {
+                m_lastAttributeName = attributes.getAttribute("name");
+                m_lastAttributeType = getAttributeType(node);
+            }
+        }
+        else if (node == NodeType::CORE_GenericAttributeNode)
+        {
             m_lastAttributeType = getAttributeType(node);
-        } else if (attributesSet.count(node.typeID()) > 0 || node == NodeType::GEN_ValueNode) {
+        }
+        else if (attributesSet.count(node.typeID()) > 0 
+            || node == NodeType::GEN_NameNode
+            || node == NodeType::GEN_ValueNode) {
 
             return true;
         }
@@ -530,22 +545,49 @@ namespace citygml {
 
         initializeAttributesSet();
 
-        if (    node == NodeType::GEN_StringAttributeNode
-             || node == NodeType::GEN_DoubleAttributeNode
-             || node == NodeType::GEN_IntAttributeNode
-             || node == NodeType::GEN_DateAttributeNode
-             || node == NodeType::GEN_UriAttributeNode) {
+        if (node == NodeType::GEN_StringAttributeNode
+            || node == NodeType::GEN_DoubleAttributeNode
+            || node == NodeType::GEN_IntAttributeNode
+            || node == NodeType::GEN_DateAttributeNode
+            || node == NodeType::GEN_UriAttributeNode) {
 
-            m_lastAttributeName = "";
-            m_lastAttributeType = AttributeType::String;
+            if (m_lastAttributeType != AttributeType::Generic)
+            {
+                m_lastAttributeName = "";
+                m_lastAttributeType = AttributeType::String;
+            }
 
             return true;
-        } else if (node == NodeType::GEN_ValueNode) {
+        }
+        else if (node == NodeType::CORE_GenericAttributeNode)
+        {
+            if(!m_lastAttributeName.empty())
+                m_model->setAttribute(m_lastAttributeName, m_lastGenericAttributeValue, m_lastGenericAttributeType);
+            m_lastAttributeName = "";
+            m_lastGenericAttributeValue = "";
+            m_lastAttributeType = AttributeType::String;
+            m_lastGenericAttributeType = AttributeType::String;
+            return true;
+        } 
+        else if (node == NodeType::GEN_NameNode)
+        {
+            m_lastAttributeName = characters;
+            return true;
+        }
+        else if (node == NodeType::GEN_ValueNode) {
 
-            if (!m_lastAttributeName.empty()) {
-                m_model->setAttribute(m_lastAttributeName, characters, m_lastAttributeType);
-            } else {
-                CITYGML_LOG_WARN(m_logger, "Found value node (" << NodeType::GEN_ValueNode << ") outside attribute node... ignore.");
+            if (m_lastAttributeType == AttributeType::Generic)
+            {
+                m_lastGenericAttributeValue = characters;
+            }
+            else
+            {
+                if (!m_lastAttributeName.empty()) {
+                    m_model->setAttribute(m_lastAttributeName, characters, m_lastAttributeType);
+                }
+                else {
+                    CITYGML_LOG_WARN(m_logger, "Found value node (" << NodeType::GEN_ValueNode << ") outside attribute node... ignore.");
+                }
             }
 
             return true;

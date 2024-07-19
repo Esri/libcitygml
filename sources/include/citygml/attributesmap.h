@@ -17,7 +17,8 @@ enum class AttributeType
     Double,
     Integer,
     Date,
-    Uri
+    Uri,
+    Generic
 };
 
 /**

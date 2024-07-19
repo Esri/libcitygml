@@ -62,6 +62,7 @@ namespace citygml {
         NODETYPE( CORE, ReferencePoint)
         NODETYPE( CORE, MimeType)
         NODETYPE( CORE, LibraryObject)
+        NODETYPE( CORE, GenericAttribute)
 
         NODETYPE( CORE, Boundary )
         NODETYPE( CORE, RelativeGeometry )
@@ -90,6 +91,7 @@ namespace citygml {
         NODETYPE( GEN, IntAttribute )
         NODETYPE( GEN, DateAttribute )
         NODETYPE( GEN, UriAttribute )
+        NODETYPE( GEN, Name )
         NODETYPE( GEN, Value )
 
         NODETYPE( GEN, Lod0Geometry )
