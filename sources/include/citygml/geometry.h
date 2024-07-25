@@ -55,8 +55,8 @@ namespace citygml {
         Geometry& getGeometry( unsigned int i );
         void addGeometry(Geometry* geom);
         void pushIntermediateNode(const IntermediateNode& node, const std::string& parentId, bool toBack = true);
-        std::string getPreviousParentId(std::string currentParentId, std::shared_ptr<citygml::CityGMLLogger> logger) const; 
-        std::string getNodeStackPath(const std::string& startNodeId, std::shared_ptr<citygml::CityGMLLogger> logger) const;
+        std::string getPreviousParentId(std::string currentParentId, std::shared_ptr<citygml::CityGMLLogger> logger = nullptr) const; 
+        std::string getNodeStackPath(const std::string& startNodeId, std::shared_ptr<citygml::CityGMLLogger> logger = nullptr) const;
         GeometryType getType() const;
 
         std::string getTypeAsString() const;

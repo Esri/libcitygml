@@ -397,7 +397,8 @@ namespace citygml {
 
         if (currentParentId != "root")
         {
-            CITYGML_LOG_ERROR(logger, "Failed to find parent id of " + currentParentId);
+            if(logger)
+                CITYGML_LOG_ERROR(logger, "Failed to find parent id of " + currentParentId);
             return currentParentId;
         }
 
