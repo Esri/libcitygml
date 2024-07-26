@@ -95,6 +95,7 @@ namespace citygml {
             COT_PointCloud                  = 1ll<< 56,
             COT_OuterBridgeConstruction     = 1ll<< 57,
             COT_OtherConstruction           = 1ll<< 58,
+            COT_OuterBridgeInstallation     = 1ll<< 59,
 
             COT_All                         = 0xFFFFFFFFFFFFFFFFll
         };

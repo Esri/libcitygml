@@ -103,6 +103,7 @@ namespace citygml {
                 typeIDTypeMap.insert(HANDLE_TYPE(BRID, BridgeInstallation));
                 typeIDTypeMap.insert(HANDLE_TYPE(BRID, BridgePart));
                 typeIDTypeMap.insert(HANDLE_TYPE(BRID, OuterBridgeConstruction));
+                typeIDTypeMap.insert(HANDLE_TYPE(BRID, OuterBridgeInstallation));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, FillingSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, WindowSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, DoorSurface));
@@ -382,6 +383,7 @@ namespace citygml {
                    || node == NodeType::CON_DoorSurfaceNode
                    || node == NodeType::CON_OtherConstructionNode
                    || node == NodeType::BRID_OuterBridgeConstructionNode
+                   || node == NodeType::BRID_OuterBridgeInstallationNode
                    || node == NodeType::BRID_BridgeConstructionElementNode
                    || node == NodeType::BRID_BridgeInstallationNode
                    || node == NodeType::BRID_BridgePartNode) {
@@ -713,6 +715,7 @@ namespace citygml {
                     || node == NodeType::CORE_Lod3MultiSurfaceNode
                     || node == NodeType::CORE_BoundaryNode
                     || node == NodeType::BRID_OuterBridgeConstructionNode
+                    || node == NodeType::BRID_OuterBridgeInstallationNode
                     || node == NodeType::BRID_BridgeConstructionElementNode
                     || node == NodeType::BRID_BridgeInstallationNode
                     || node == NodeType::BRID_BridgePartNode) {

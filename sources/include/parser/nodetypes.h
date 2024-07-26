@@ -375,6 +375,7 @@ namespace citygml {
         NODETYPE( BRID, BridgeInstallation )
         NODETYPE( BRID, BridgePart )
         NODETYPE( BRID, OuterBridgeConstruction )
+        NODETYPE( BRID, OuterBridgeInstallation )
 
         // APP
         NODETYPE( APP, Appearance )
