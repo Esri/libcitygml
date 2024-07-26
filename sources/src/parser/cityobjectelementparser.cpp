@@ -102,6 +102,7 @@ namespace citygml {
                 typeIDTypeMap.insert(HANDLE_TYPE(BRID, BridgeConstructionElement));
                 typeIDTypeMap.insert(HANDLE_TYPE(BRID, BridgeInstallation));
                 typeIDTypeMap.insert(HANDLE_TYPE(BRID, BridgePart));
+                typeIDTypeMap.insert(HANDLE_TYPE(BRID, OuterBridgeConstruction));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, FillingSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, WindowSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, DoorSurface));
@@ -379,7 +380,11 @@ namespace citygml {
                    || node == NodeType::CON_FillingSurfaceNode
                    || node == NodeType::CON_WindowSurfaceNode
                    || node == NodeType::CON_DoorSurfaceNode
-                   || node == NodeType::CON_OtherConstructionNode) {
+                   || node == NodeType::CON_OtherConstructionNode
+                   || node == NodeType::BRID_OuterBridgeConstructionNode
+                   || node == NodeType::BRID_BridgeConstructionElementNode
+                   || node == NodeType::BRID_BridgeInstallationNode
+                   || node == NodeType::BRID_BridgePartNode) {
 
             std::string nodeId = attributes.getCityGMLIDAttribute();
             setParserForNextElement(new CityObjectElementParser(m_documentParser, m_factory, m_logger, [this, node, nodeId](CityObject* obj) {
@@ -640,6 +645,7 @@ namespace citygml {
                     || node == NodeType::VEG_Lod2ImplicitRepresentationNode
                     || node == NodeType::VEG_Lod3ImplicitRepresentationNode
                     || node == NodeType::VEG_Lod4ImplicitRepresentationNode
+                    || node == NodeType::VEG_Lod2GeometryNode
                     || node == NodeType::CORE_ExternalReferenceNode
                     || node == NodeType::BLDG_ConsistsOfBuildingPartNode
                     || node == NodeType::FRN_Lod1GeometryNode
@@ -705,7 +711,11 @@ namespace citygml {
                     || node == NodeType::CORE_Lod1MultiSurfaceNode
                     || node == NodeType::CORE_Lod2MultiSurfaceNode
                     || node == NodeType::CORE_Lod3MultiSurfaceNode
-                    || node == NodeType::CORE_BoundaryNode) {
+                    || node == NodeType::CORE_BoundaryNode
+                    || node == NodeType::BRID_OuterBridgeConstructionNode
+                    || node == NodeType::BRID_BridgeConstructionElementNode
+                    || node == NodeType::BRID_BridgeInstallationNode
+                    || node == NodeType::BRID_BridgePartNode) {
 
             return true;
         }

@@ -228,6 +228,8 @@ namespace citygml {
             return "BridgeInstallation";
         case CityObject::CityObjectsType::COT_BridgePart:
             return "BridgePart";
+        case CityObject::CityObjectsType::COT_OuterBridgeConstruction:
+            return "OuterBridgeConstruction";
         case CityObject::CityObjectsType::COT_BuildingPart:
             return "BuildingPart";
         case CityObject::CityObjectsType::COT_WallSurface:
@@ -319,6 +321,7 @@ namespace citygml {
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_BridgeConstructionElement), CityObject::CityObjectsType::COT_BridgeConstructionElement},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_BridgeInstallation), CityObject::CityObjectsType::COT_BridgeInstallation},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_BridgePart), CityObject::CityObjectsType::COT_BridgePart},
+         {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_OuterBridgeConstruction), CityObject::CityObjectsType::COT_OuterBridgeConstruction},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_BuildingPart), CityObject::CityObjectsType::COT_BuildingPart},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_WallSurface), CityObject::CityObjectsType::COT_WallSurface},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_RoofSurface), CityObject::CityObjectsType::COT_RoofSurface},
