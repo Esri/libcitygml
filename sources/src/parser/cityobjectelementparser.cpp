@@ -480,27 +480,31 @@ namespace citygml {
 
             parseGeometryForLODLevel(node, 4, attributes);
         } else if (node == NodeType::GEN_Lod0GeometryNode) {
-            parseGeometryPropertyElementForLODLevel(0, attributes.getCityGMLIDAttribute());
+            parseGeometryPropertyElementForLODLevel(node, 0, attributes.getCityGMLIDAttribute());
         }
         else if (node == NodeType::GEN_Lod1GeometryNode
                    || node == NodeType::FRN_Lod1GeometryNode
-                   || node == NodeType::VEG_Lod1GeometryNode) {
-            parseGeometryPropertyElementForLODLevel(1, attributes.getCityGMLIDAttribute());
+                   || node == NodeType::VEG_Lod1GeometryNode
+                   || node == NodeType::BRID_Lod1GeometryNode) {
+            parseGeometryPropertyElementForLODLevel(node, 1, attributes.getCityGMLIDAttribute());
         } else if (node == NodeType::GEN_Lod2GeometryNode
                    || node == NodeType::FRN_Lod2GeometryNode
                    || node == NodeType::BLDG_Lod2GeometryNode
-                   || node == NodeType::VEG_Lod2GeometryNode) {
-            parseGeometryPropertyElementForLODLevel(2, attributes.getCityGMLIDAttribute());
+                   || node == NodeType::VEG_Lod2GeometryNode
+                   || node == NodeType::BRID_Lod2GeometryNode ) {
+            parseGeometryPropertyElementForLODLevel(node, 2, attributes.getCityGMLIDAttribute());
         } else if (node == NodeType::GEN_Lod3GeometryNode
                    || node == NodeType::FRN_Lod3GeometryNode
                    || node == NodeType::BLDG_Lod3GeometryNode
-                   || node == NodeType::VEG_Lod3GeometryNode) {
-            parseGeometryPropertyElementForLODLevel(3, attributes.getCityGMLIDAttribute());
+                   || node == NodeType::VEG_Lod3GeometryNode
+                   || node == NodeType::BRID_Lod3GeometryNode) {
+            parseGeometryPropertyElementForLODLevel(node, 3, attributes.getCityGMLIDAttribute());
         } else if (node == NodeType::GEN_Lod4GeometryNode
                    || node == NodeType::FRN_Lod4GeometryNode
                    || node == NodeType::BLDG_Lod4GeometryNode
-                   || node == NodeType::VEG_Lod4GeometryNode) {
-            parseGeometryPropertyElementForLODLevel(4, attributes.getCityGMLIDAttribute());
+                   || node == NodeType::VEG_Lod4GeometryNode
+                   || node == NodeType::BRID_Lod4GeometryNode) {
+            parseGeometryPropertyElementForLODLevel(node, 4, attributes.getCityGMLIDAttribute());
         } else if (node == NodeType::GEN_Lod0ImplicitRepresentationNode) {
           
             parseImplicitGeometryForLODLevel(0);
@@ -776,21 +780,27 @@ namespace citygml {
         }));
     }
 
-    void CityObjectElementParser::parseGeometryPropertyElementForLODLevel(int lod, const std::string& id)
+    void CityObjectElementParser::parseGeometryPropertyElementForLODLevel(const citygml::NodeType::XMLNode& node, int lod, const std::string& id)
     {
         setParserForNextElement(new DelayedChoiceElementParser(m_documentParser, m_logger, {
-            new PolygonElementParser(m_documentParser, m_factory, m_logger, [id, lod, this](std::shared_ptr<Polygon> p) {
+            new PolygonElementParser(m_documentParser, m_factory, m_logger, [id, lod, node, this](std::shared_ptr<Polygon> p) {
                                                                        Geometry* geom = m_factory.createGeometry(id, m_model->getType(), lod);
                                                                        geom->addPolygon(p);
                                                                        m_model->addGeometry(geom);
+                                                                       IntermediateNode intermediateNode(node.prefix(), node.baseName(), id);
+                                                                       geom->pushIntermediateNode(intermediateNode, "root", false);
                                                                    }),
-            new LineStringElementParser(m_documentParser, m_factory, m_logger, [id, lod, this](std::shared_ptr<LineString> l) {
+            new LineStringElementParser(m_documentParser, m_factory, m_logger, [id, lod, node, this](std::shared_ptr<LineString> l) {
                                                                        Geometry* geom = m_factory.createGeometry(id, m_model->getType(), lod);
                                                                        geom->addLineString(l);
                                                                        m_model->addGeometry(geom);
+                                                                       IntermediateNode intermediateNode(node.prefix(), node.baseName(), id);
+                                                                       geom->pushIntermediateNode(intermediateNode, "root", false);
                                                                    }),
-            new GeometryElementParser(m_documentParser, m_factory, m_logger, lod, m_model->getType(), [this](Geometry* geom) {
+            new GeometryElementParser(m_documentParser, m_factory, m_logger, lod, m_model->getType(), [this, node, id](Geometry* geom) {
                                                                        m_model->addGeometry(geom);
+                                                                       IntermediateNode intermediateNode(node.prefix(), node.baseName(), id);
+                                                                       geom->pushIntermediateNode(intermediateNode, "root", false);
                                                                    })
         }));
 
