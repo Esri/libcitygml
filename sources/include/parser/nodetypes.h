@@ -117,6 +117,9 @@ namespace citygml {
         NODETYPE( GEN, Lod0MultiCurve )
         NODETYPE( GEN, Lod2MultiCurve )
         NODETYPE( GEN, Lod3MultiCurve )
+        NODETYPE( GEN, Lod0MultiSurface )
+        NODETYPE( GEN, Lod2MultiSurface )
+        NODETYPE( GEN, Lod3MultiSurface )
         NODETYPE( GEN, Area )
         NODETYPE( GEN, SpaceType )
         NODETYPE( GEN, Volume )
@@ -219,6 +222,10 @@ namespace citygml {
         NODETYPE( BLDG, Lod2MultiCurve )
         NODETYPE( BLDG, Lod3MultiCurve )
         NODETYPE( BLDG, Lod4MultiCurve )
+        NODETYPE( BLDG, Lod1MultiSurface)
+        NODETYPE( BLDG, Lod2MultiSurface)
+        NODETYPE( BLDG, Lod3MultiSurface)
+        NODETYPE( BLDG, Lod4MultiSurface)
         NODETYPE( BLDG, Lod1TerrainIntersection )
         NODETYPE( BLDG, Lod2TerrainIntersection )
         NODETYPE( BLDG, Lod3TerrainIntersection )
@@ -231,7 +238,16 @@ namespace citygml {
         NODETYPE( CON, OtherConstruction )
 
         // BoundarySurfaceType
-        NODETYPE( BLDG, ClosureSurface )
+        NODETYPE(BLDG, WallSurface )
+        NODETYPE(BLDG, RoofSurface )
+        NODETYPE(BLDG, GroundSurface )
+        NODETYPE(BLDG, ClosureSurface )
+        NODETYPE(BLDG, FloorSurface )
+        NODETYPE(BLDG, InteriorWallSurface )
+        NODETYPE(BLDG, CeilingSurface )
+        NODETYPE(BLDG, OuterCeilingSurface )
+        NODETYPE(BLDG, OuterFloorSurface )
+
         NODETYPE( CON, WallSurface )
         NODETYPE( CON, RoofSurface )
         NODETYPE( CON, GroundSurface )
@@ -288,7 +304,9 @@ namespace citygml {
         NODETYPE( WTR, Usage )
         NODETYPE( WTR, WaterLevel )
         NODETYPE( WTR, Lod0MultiCurve )
-        NODETYPE( WTR, Lod1MultiCurve )
+        NODETYPE( WTR, Lod0MultiSurface)
+        NODETYPE( WTR, Lod1MultiCurve)
+        NODETYPE( WTR, Lod1MultiSurface)
         NODETYPE( WTR, Lod1Solid )
         NODETYPE( WTR, Lod2Solid )
         NODETYPE( WTR, Lod3Solid )
@@ -340,6 +358,10 @@ namespace citygml {
         NODETYPE( TRANS, Granularity )
 
         NODETYPE( TRANS, Lod0Network )
+        NODETYPE( TRANS, Lod1MultiSurface )
+        NODETYPE( TRANS, Lod2MultiSurface )
+        NODETYPE( TRANS, Lod3MultiSurface )
+        NODETYPE( TRANS, Lod4MultiSurface )
 
 
         // LUSE
@@ -348,6 +370,12 @@ namespace citygml {
         NODETYPE( LUSE, Class )
         NODETYPE( LUSE, Usage )
         NODETYPE( LUSE, Function )
+
+        NODETYPE( LUSE, Lod1MultiSurface)
+        NODETYPE( LUSE, Lod2MultiSurface)
+        NODETYPE( LUSE, Lod3MultiSurface)
+        NODETYPE( LUSE, Lod4MultiSurface)
+
 
         // DEM (Relief)
         NODETYPE( DEM, ReliefFeature )

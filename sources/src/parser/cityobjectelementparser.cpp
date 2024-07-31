@@ -106,11 +106,19 @@ namespace citygml {
                 typeIDTypeMap.insert(HANDLE_TYPE(BRID, OuterBridgeInstallation));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, FillingSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, WindowSurface));
+                typeIDTypeMap.insert(HANDLE_TYPE(BLDG, WallSurface));
+                typeIDTypeMap.insert(HANDLE_TYPE(BLDG, RoofSurface));
+                typeIDTypeMap.insert(HANDLE_TYPE(BLDG, GroundSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, DoorSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, WallSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, RoofSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, GroundSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(BLDG, ClosureSurface));
+                typeIDTypeMap.insert(HANDLE_TYPE(BLDG, FloorSurface));
+                typeIDTypeMap.insert(HANDLE_TYPE(BLDG, InteriorWallSurface));
+                typeIDTypeMap.insert(HANDLE_TYPE(BLDG, CeilingSurface));
+                typeIDTypeMap.insert(HANDLE_TYPE(BLDG, OuterCeilingSurface));
+                typeIDTypeMap.insert(HANDLE_TYPE(BLDG, OuterFloorSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, FloorSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, InteriorWallSurface));
                 typeIDTypeMap.insert(HANDLE_TYPE(CON, CeilingSurface));
@@ -412,6 +420,7 @@ namespace citygml {
             }
         } else if (node == NodeType::GEN_Lod0TerrainIntersectionNode
                    || node == NodeType::WTR_Lod0MultiCurveNode
+                   || node == NodeType::WTR_Lod0MultiSurfaceNode
                    || node == NodeType::CORE_Lod0MultiSurfaceNode) {
             
             parseGeometryForLODLevel(node, 0, attributes);
@@ -422,46 +431,63 @@ namespace citygml {
             // for Lod0 roof edge, we must explicitly set the City Object Type, because the parent type is "Building", and it doesn't allow to discriminate between the ground and roof surface
             parseGeometryForLODLevel(node, 0, CityObject::CityObjectsType::COT_RoofSurface, attributes);
         } else if (node == NodeType::BLDG_Lod1MultiCurveNode
+                   || node == NodeType::BLDG_Lod1MultiSurfaceNode
                    || node == NodeType::BLDG_Lod1SolidNode
                    || node == NodeType::BLDG_Lod1TerrainIntersectionNode
                    || node == NodeType::GEN_Lod1TerrainIntersectionNode
                    || node == NodeType::FRN_Lod1TerrainIntersectionNode
+                   || node == NodeType::LUSE_Lod1MultiSurfaceNode
+                   || node == NodeType::TRANS_Lod1MultiSurfaceNode
                    || node == NodeType::WTR_Lod1MultiCurveNode
+                   || node == NodeType::WTR_Lod1MultiSurfaceNode
                    || node == NodeType::CORE_Lod0MultiSurfaceNode
                    || node == NodeType::CORE_Lod1MultiSurfaceNode
                    || node == NodeType::WTR_Lod1SolidNode) {
 
             parseGeometryForLODLevel(node, 1, attributes);
         } else if (node == NodeType::BLDG_Lod2MultiCurveNode
+                   || node == NodeType::BLDG_Lod2MultiSurfaceNode
                    || node == NodeType::BLDG_Lod2SolidNode
                    || node == NodeType::BLDG_Lod2TerrainIntersectionNode
                    || node == NodeType::GEN_Lod2TerrainIntersectionNode
                    || node == NodeType::FRN_Lod2TerrainIntersectionNode
+                   || node == NodeType::LUSE_Lod2MultiSurfaceNode
+                   || node == NodeType::TRANS_Lod2MultiSurfaceNode
                    || node == NodeType::WTR_Lod2SolidNode
                    || node == NodeType::WTR_Lod2SurfaceNode
                    || node == NodeType::GEN_Lod0MultiCurveNode
                    || node == NodeType::GEN_Lod2MultiCurveNode
                    || node == NodeType::GEN_Lod3MultiCurveNode
+                   || node == NodeType::GEN_Lod0MultiSurfaceNode
+                   || node == NodeType::GEN_Lod2MultiSurfaceNode
+                   || node == NodeType::GEN_Lod3MultiSurfaceNode
                    || node == NodeType::CORE_Lod0MultiSurfaceNode
                    || node == NodeType::CORE_Lod2MultiSurfaceNode
                    || node == NodeType::CORE_Lod3MultiSurfaceNode) {
 
             parseGeometryForLODLevel(node, 2, attributes);
         } else if (node == NodeType::BLDG_Lod3MultiCurveNode
+                   || node == NodeType::BLDG_Lod3MultiSurfaceNode
                    || node == NodeType::CORE_Lod3MultiSurfaceNode
                    || node == NodeType::BLDG_Lod3SolidNode
                    || node == NodeType::BLDG_Lod3TerrainIntersectionNode
                    || node == NodeType::GEN_Lod3TerrainIntersectionNode
                    || node == NodeType::FRN_Lod3TerrainIntersectionNode
                    || node == NodeType::WTR_Lod3SolidNode
+                   || node == NodeType::LUSE_Lod3MultiSurfaceNode
+                   || node == NodeType::TRANS_Lod3MultiSurfaceNode
                    || node == NodeType::WTR_Lod3SurfaceNode) {
 
             parseGeometryForLODLevel(node, 3, attributes);
         } else if (node == NodeType::BLDG_Lod4MultiCurveNode
                    || node == NodeType::BLDG_Lod4SolidNode
+                   || node == NodeType::BLDG_Lod4MultiSurfaceNode
+                   || node == NodeType::BLDG_Lod4SolidNode
                    || node == NodeType::BLDG_Lod4TerrainIntersectionNode
                    || node == NodeType::GEN_Lod4TerrainIntersectionNode
                    || node == NodeType::FRN_Lod4TerrainIntersectionNode
+                   || node == NodeType::LUSE_Lod4MultiSurfaceNode
+                   || node == NodeType::TRANS_Lod4MultiSurfaceNode
                    || node == NodeType::WTR_Lod4SolidNode
                    || node == NodeType::WTR_Lod4SurfaceNode) {
 
@@ -612,18 +638,22 @@ namespace citygml {
                     || node == NodeType::BLDG_Lod0FootPrintNode
                     || node == NodeType::BLDG_Lod0RoofEdgeNode
                     || node == NodeType::BLDG_Lod1MultiCurveNode
+                    || node == NodeType::BLDG_Lod1MultiSurfaceNode
                     || node == NodeType::BLDG_Lod1SolidNode
                     || node == NodeType::BLDG_Lod1TerrainIntersectionNode
                     || node == NodeType::BLDG_Lod2GeometryNode
                     || node == NodeType::BLDG_Lod2MultiCurveNode
+                    || node == NodeType::BLDG_Lod2MultiSurfaceNode
                     || node == NodeType::BLDG_Lod2SolidNode
                     || node == NodeType::BLDG_Lod2TerrainIntersectionNode
                     || node == NodeType::BLDG_Lod3GeometryNode
                     || node == NodeType::BLDG_Lod3MultiCurveNode
+                    || node == NodeType::BLDG_Lod3MultiSurfaceNode
                     || node == NodeType::BLDG_Lod3SolidNode
                     || node == NodeType::BLDG_Lod3TerrainIntersectionNode
                     || node == NodeType::BLDG_Lod4GeometryNode
                     || node == NodeType::BLDG_Lod4MultiCurveNode
+                    || node == NodeType::BLDG_Lod4MultiSurfaceNode
                     || node == NodeType::BLDG_Lod4SolidNode
                     || node == NodeType::BLDG_Lod4TerrainIntersectionNode
                     || node == NodeType::BLDG_BuildingPartNode
@@ -673,6 +703,10 @@ namespace citygml {
                     || node == NodeType::GML_MultiPointNode
                     || node == NodeType::GRP_GroupMemberNode
                     || node == NodeType::GRP_ParentNode
+                    || node == NodeType::LUSE_Lod1MultiSurfaceNode
+                    || node == NodeType::LUSE_Lod2MultiSurfaceNode
+                    || node == NodeType::LUSE_Lod3MultiSurfaceNode
+                    || node == NodeType::LUSE_Lod4MultiSurfaceNode
                     || node == NodeType::DEM_ReliefComponentNode
                     || node == NodeType::DEM_TINReliefNode
                     || node == NodeType::DEM_MassPointReliefNode
@@ -694,8 +728,14 @@ namespace citygml {
                     || node == NodeType::TRANS_IntersectionNode
                     || node == NodeType::TRANS_SectionNode
                     || node == NodeType::TRANS_WaterwayNode
+                    || node == NodeType::TRANS_Lod1MultiSurfaceNode
+                    || node == NodeType::TRANS_Lod2MultiSurfaceNode
+                    || node == NodeType::TRANS_Lod3MultiSurfaceNode
+                    || node == NodeType::TRANS_Lod4MultiSurfaceNode
                     || node == NodeType::WTR_Lod0MultiCurveNode
+                    || node == NodeType::WTR_Lod0MultiSurfaceNode
                     || node == NodeType::WTR_Lod1MultiCurveNode
+                    || node == NodeType::WTR_Lod1MultiSurfaceNode
                     || node == NodeType::WTR_Lod1SolidNode
                     || node == NodeType::WTR_Lod2SolidNode
                     || node == NodeType::WTR_Lod3SolidNode
@@ -714,6 +754,9 @@ namespace citygml {
                     || node == NodeType::GEN_Lod0MultiCurveNode
                     || node == NodeType::GEN_Lod2MultiCurveNode
                     || node == NodeType::GEN_Lod3MultiCurveNode
+                    || node == NodeType::GEN_Lod0MultiSurfaceNode
+                    || node == NodeType::GEN_Lod2MultiSurfaceNode
+                    || node == NodeType::GEN_Lod3MultiSurfaceNode
                     || node == NodeType::CORE_Lod0MultiSurfaceNode
                     || node == NodeType::CORE_Lod1MultiSurfaceNode
                     || node == NodeType::CORE_Lod2MultiSurfaceNode
