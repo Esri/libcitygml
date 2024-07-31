@@ -55,7 +55,7 @@ namespace citygml {
         void parseGeometryForLODLevel(const citygml::NodeType::XMLNode& node, int lod, const Attributes& attributes);
         void parseGeometryForLODLevel(const citygml::NodeType::XMLNode& node, int lod, CityObject::CityObjectsType parentType, const Attributes& attributes);
         void parseImplicitGeometryForLODLevel(int lod);
-        void parseGeometryPropertyElementForLODLevel(int lod, const std::string& id);
+        void parseGeometryPropertyElementForLODLevel(const citygml::NodeType::XMLNode& node, int lod, const std::string& id);
     };
 
 }
