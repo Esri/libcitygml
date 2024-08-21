@@ -1,7 +1,7 @@
 #include <citygml/externalreference.h>
 
 namespace citygml {
-    ExternalObjectReference::ExternalObjectReference() {
+    ExternalObjectReference::ExternalObjectReference() : name("") {
     }
 
     ExternalObjectReference::~ExternalObjectReference() {
