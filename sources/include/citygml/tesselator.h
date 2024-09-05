@@ -17,7 +17,7 @@
 #ifndef __TESSELATOR_H__
 #define __TESSELATOR_H__
 
-#ifdef WIN32
+#if defined(WIN32) or defined(_WIN32)
 #	include <windows.h>
 #else
 #	define CALLBACK
