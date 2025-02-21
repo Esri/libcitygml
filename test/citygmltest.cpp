@@ -23,6 +23,7 @@
 #include <citygml/cityobject.h>
 #include <citygml/geometry.h>
 #include <citygml/implictgeometry.h>
+#include <citygml/utils.h>
 
 #ifdef LIBCITYGML_USE_OPENGL
 #include <citygml/tesselator.h>
@@ -64,7 +65,7 @@ int main( int argc, char **argv )
     for ( int i = 1; i < argc; i++ )
     {
         std::string param = std::string( argv[i] );
-        std::transform( param.begin(), param.end(), param.begin(), tolower );
+        std::transform( param.begin(), param.end(), param.begin(), internalToLower );
         if ( param == "-log" ) { log = true; fargc = i+1; }
         //if ( param == "-filter" ) { if ( i == argc - 1 ) usage(); params.objectsMask = argv[i+1]; i++; fargc = i+1; }
         if ( param == "-destsrs" ) { if ( i == argc - 1 ) usage(); params.destSRS = argv[i+1]; i++; fargc = i+1; }

@@ -103,7 +103,7 @@ public:
         std::string currentOption;
         while ( iss >> currentOption )
         {
-            std::transform( currentOption.begin(), currentOption.end(), currentOption.begin(), ::tolower );
+            std::transform( currentOption.begin(), currentOption.end(), currentOption.begin(), internalToLower );
             if ( currentOption == "names" ) _printNames = true;
             else if ( currentOption == "mask" ) iss >> _params.objectsMask;
             else if ( currentOption == "minlod" ) iss >> _params.minLOD;
