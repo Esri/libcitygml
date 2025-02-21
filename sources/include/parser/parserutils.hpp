@@ -13,15 +13,6 @@
 
 namespace citygml {
 
-    template<class T> inline T parseValue( const std::string &s, std::shared_ptr<citygml::CityGMLLogger>&, const DocumentLocation&)
-    {
-        std::stringstream ss;
-        ss << s;
-        T v;
-        ss >> v;
-        return v;
-    }
-
     inline TransformationMatrix parseMatrix( const std::string &s, std::shared_ptr<citygml::CityGMLLogger>& logger, const DocumentLocation& location)
     {
         std::stringstream ss;
@@ -46,6 +37,56 @@ namespace citygml {
         return TransformationMatrix(matrix);
     }
 
+    template<class T> inline T parseNumber(const char* str, char** end);
+
+    template<> inline float parseNumber<float>(const char* str, char** end) {
+        return std::strtof(str, end);
+    }
+
+    template<> inline double parseNumber<double>(const char* str, char** end) {
+        return std::strtod(str, end);
+    }
+
+    template<typename T>
+    inline bool parseVec(T& result, const char* str, char** end) {
+        result = parseNumber<T>(str, end);
+        return str != *end;
+    }
+
+    template<typename T> inline bool parseVec(TVec2<T>& result, const char* str, char** end) {
+        result.x = parseNumber<T>(str, end);
+        if (str == *end) {
+            return false;
+        }
+        str = *end;
+        result.y = parseNumber<T>(str, end);
+        return str != *end;
+    }
+
+    template<typename T> inline bool parseVec(TVec3<T>& result, const char* str, char** end) {
+        result.x = parseNumber<T>(str, end);
+        if (str == *end) {
+            return false;
+        }
+        str = *end;
+        result.y = parseNumber<T>(str, end);
+        if (str == *end) {
+            return false;
+        }
+        str = *end;
+        result.z = parseNumber<T>(str, end);
+        return str != *end;
+    }
+
+    template<class T> inline T parseValue( const std::string &s, std::shared_ptr<citygml::CityGMLLogger>&, const DocumentLocation&)
+    {
+        const char* str = s.c_str();
+        char* end = nullptr;
+        T value;
+        parseVec(value, str, &end);
+        return value;
+    }
+
     template<> inline bool parseValue( const std::string &s, std::shared_ptr<citygml::CityGMLLogger>& logger, const DocumentLocation& location )
     {
         // parsing a bool is special because "true" and "1" are true while "false" and "0" are false
@@ -61,17 +102,18 @@ namespace citygml {
 
     template<class T> inline std::vector<T> parseVecList( const std::string &s,  std::shared_ptr<citygml::CityGMLLogger>& logger, const DocumentLocation& location )
     {
-        std::stringstream ss;
-        ss << s;
-
-        T v;
         std::vector<T> vec;
-        while ( ss >> v )
-            vec.push_back( v );
+        const char* str = s.c_str();
 
-        if ( !ss.eof() )
-        {
-            CITYGML_LOG_WARN(logger, "Mismatch type, list of " << typeid(T).name() << " expected at " << location << " Ring/Polygon may be incomplete!");
+        char* end = nullptr;
+        while (*str != '\0') {
+            T value;
+            if (!parseVec(value, str, &end)) {
+                CITYGML_LOG_WARN(logger, "Mismatch type, list of " << typeid(T).name() << " expected at " << location << " Ring/Polygon may be incomplete!");
+                break;
+            }
+            vec.push_back(value);
+            str = end;
         }
 
         return vec;
