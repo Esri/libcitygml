@@ -39,18 +39,22 @@ inline std::vector<std::string> tokenize( const std::string& str, const std::str
     return tokens;
 }
 
+inline char internalToLower(char c) {
+	return c >= 'A' && c <= 'Z' ? c + 32 : c;
+}
+
 inline bool ci_string_compare( const std::string& str1, const std::string& str2 )
 {
     std::string s1( str1 );
-    std::transform( s1.begin(), s1.end(), s1.begin(), ::tolower );
+    std::transform( s1.begin(), s1.end(), s1.begin(), internalToLower );
     std::string s2( str2 );
-    std::transform( s2.begin(), s2.end(), s2.begin(), ::tolower );
+    std::transform( s2.begin(), s2.end(), s2.begin(), internalToLower );
     return s1 == s2;
 }
 
 inline std::string toLower(const std::string& s) {
     std::string lower = s;
-    std::transform( lower.begin(), lower.end(), lower.begin(), ::tolower );
+    std::transform( lower.begin(), lower.end(), lower.begin(), internalToLower );
     return lower;
 }
 

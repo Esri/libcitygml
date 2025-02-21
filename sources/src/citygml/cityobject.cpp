@@ -6,6 +6,7 @@
 #include <citygml/citygml.h>
 #include <citygml/citygmllogger.h>
 #include <citygml/address.h>
+#include <citygml/utils.h>
 
 #include <unordered_map>
 #include <algorithm>
@@ -333,7 +334,7 @@ namespace citygml {
 
     std::string cityObjectsTypeToLowerString(const CityObject::CityObjectsType& t) {
         std::string str = cityObjectsTypeToString(t);
-        std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+        std::transform(str.begin(), str.end(), str.begin(), internalToLower);
         return str;
     }
 
@@ -387,7 +388,7 @@ namespace citygml {
     CityObject::CityObjectsType cityObjectsTypeFromString(const std::string& s, bool& valid)
     {
         std::string lower_s = s;
-        std::transform(lower_s.begin(), lower_s.end(), lower_s.begin(), ::tolower);
+        std::transform(lower_s.begin(), lower_s.end(), lower_s.begin(), internalToLower);
         auto it = stringTypeMap.find(lower_s);
 
         valid = it != stringTypeMap.end();
