@@ -3,7 +3,7 @@
 #include <bitset>
 #include <vector>
 #include <memory>
-#include <deque>
+#include <unordered_map>
 
 #include <citygml/featureobject.h>
 #include <citygml/citygml_api.h>
@@ -164,7 +164,7 @@ namespace citygml {
         std::unique_ptr<ExternalReference> m_externalReference;
 
         // Keyed on parent ids
-        std::map<std::string, std::deque<IntermediateNode>> m_NodeStack;
+        std::map<std::string, std::unordered_map<std::string, IntermediateNode>> m_NodeStack;
         PRAGMA_WARN_DLL_END
     };
 

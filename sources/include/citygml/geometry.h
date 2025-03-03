@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <vector>
-#include <deque>
+#include <unordered_map>
 #include <unordered_set>
 
 #include <citygml/citygml_api.h>
@@ -96,7 +96,7 @@ namespace citygml {
         std::string m_srsName;
 
         // Keyed on parent ids
-        std::map<std::string, std::deque<IntermediateNode>> m_NodeStack;
+        std::map<std::string, std::unordered_map<std::string, IntermediateNode>> m_NodeStack;
 
         std::vector<std::shared_ptr<Geometry> > m_childGeometries;
 
