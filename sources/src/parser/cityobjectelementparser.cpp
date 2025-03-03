@@ -398,7 +398,7 @@ namespace citygml {
             setParserForNextElement(new CityObjectElementParser(m_documentParser, m_factory, m_logger, [this, node, nodeId](CityObject* obj) {
                                         m_model->addChildCityObject(obj);
                                         IntermediateNode intermediateNode(node.prefix(), node.baseName(), nodeId);
-                                        obj->pushIntermediateNode(intermediateNode, "root", false);
+                                        obj->pushIntermediateNode(intermediateNode, "root");
                                     }));
         } else if (node == NodeType::APP_AppearanceNode // Compatibility with CityGML 1.0 (in CityGML 2 CityObjects can only contain appearanceMember elements)
                    || node == NodeType::APP_AppearanceMemberNode) {
@@ -802,7 +802,7 @@ namespace citygml {
             m_model->addGeometry(geom);
             // Need to push to back as this is the top level tag of the geometry
             IntermediateNode intermediateNode(node.prefix(), node.baseName(), nodeId);
-            geom->pushIntermediateNode(intermediateNode, "root", false);
+            geom->pushIntermediateNode(intermediateNode, "root");
         }));
     }
     
@@ -826,19 +826,19 @@ namespace citygml {
                                                                        geom->addPolygon(p);
                                                                        m_model->addGeometry(geom);
                                                                        IntermediateNode intermediateNode(node.prefix(), node.baseName(), id);
-                                                                       geom->pushIntermediateNode(intermediateNode, "root", false);
+                                                                       geom->pushIntermediateNode(intermediateNode, "root");
                                                                    }),
             new LineStringElementParser(m_documentParser, m_factory, m_logger, [id, lod, node, this](std::shared_ptr<LineString> l) {
                                                                        Geometry* geom = m_factory.createGeometry(id, m_model->getType(), lod);
                                                                        geom->addLineString(l);
                                                                        m_model->addGeometry(geom);
                                                                        IntermediateNode intermediateNode(node.prefix(), node.baseName(), id);
-                                                                       geom->pushIntermediateNode(intermediateNode, "root", false);
+                                                                       geom->pushIntermediateNode(intermediateNode, "root");
                                                                    }),
             new GeometryElementParser(m_documentParser, m_factory, m_logger, lod, m_model->getType(), [this, node, id](Geometry* geom) {
                                                                        m_model->addGeometry(geom);
                                                                        IntermediateNode intermediateNode(node.prefix(), node.baseName(), id);
-                                                                       geom->pushIntermediateNode(intermediateNode, "root", false);
+                                                                       geom->pushIntermediateNode(intermediateNode, "root");
                                                                    })
         }));
 
