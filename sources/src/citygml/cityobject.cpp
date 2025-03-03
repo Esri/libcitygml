@@ -449,7 +449,7 @@ namespace citygml {
         return "";
     }
 
-    void CityObject::pushIntermediateNode(const IntermediateNode& node, const std::string& parentId, bool toBack)
+    void CityObject::pushIntermediateNode(const IntermediateNode& node, const std::string& parentId)
     {
         auto const parentIter = m_NodeStack.emplace(parentId, std::unordered_map<std::string, citygml::IntermediateNode>{}).first;
 
@@ -466,14 +466,7 @@ namespace citygml {
             parentIter->second.clear();
         }
 
-        if (toBack)
-        {
-            parentIter->second.emplace(node.id(), node);
-        }
-        else
-        {
-            parentIter->second.emplace(node.id(), node);
-        }
+        parentIter->second.emplace(node.id(), node);
     }
 
 }

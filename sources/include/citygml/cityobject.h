@@ -132,7 +132,7 @@ namespace citygml {
 
         void addChildCityObject(CityObject* cityObj);
 
-        void pushIntermediateNode(const IntermediateNode& node, const std::string& parentId, bool toBack = true);
+        void pushIntermediateNode(const IntermediateNode& node, const std::string& parentId);
         std::string getPreviousParentId(std::string currentParentId, std::shared_ptr<citygml::CityGMLLogger> logger) const;
         std::string getNodeStackPath(const std::string& startNodeId, std::shared_ptr<citygml::CityGMLLogger> logger) const;
 
