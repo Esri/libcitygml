@@ -372,14 +372,12 @@ namespace citygml {
 
             // Now look for the details of the node from the parent
             auto parentChildren = m_NodeStack.at(parentId);
-            auto nodeIt = std::find_if(parentChildren.begin(), parentChildren.end(), [currentId](const IntermediateNode& node) {
-                return node.id() == currentId;
-                });
+            auto nodeIt = parentChildren.find(currentId);
             if (nodeIt != parentChildren.end())
             {
                 // Found the node in the parent's children
-                std::string idBlock = nodeIt->id().empty() ? "" : "[" + nodeIt->id() + "]";
-                pathToRoot = nodeIt->name() + idBlock + "\\" + pathToRoot;
+                std::string idBlock = nodeIt->first.empty() ? "" : "[" + nodeIt->first + "]";
+                pathToRoot = nodeIt->second.name() + idBlock + "\\" + pathToRoot;
                 currentId = parentId;
             }
             else
@@ -396,9 +394,7 @@ namespace citygml {
     {
         for (auto& pair : m_NodeStack)
         {
-            if (std::find_if(pair.second.begin(), pair.second.end(),
-                [currentParentId](const IntermediateNode& node)
-                { return currentParentId == node.id(); }) != pair.second.end())
+            if (pair.second.find(currentParentId) != pair.second.end())
                 return pair.first;
         }
 
@@ -413,31 +409,28 @@ namespace citygml {
 
     void CityObject::pushIntermediateNode(const IntermediateNode& node, const std::string& parentId, bool toBack)
     {
-        if (m_NodeStack.find(parentId) == m_NodeStack.end())
-            m_NodeStack.insert(std::make_pair(parentId, std::deque<citygml::IntermediateNode>()));
+        auto const parentIter = m_NodeStack.emplace(parentId, std::unordered_map<std::string, citygml::IntermediateNode>{}).first;
 
         // if replacing the root then root elements are moved to become children of the new element
         if (parentId == "root")
         {
-            if (m_NodeStack.find(node.id()) == m_NodeStack.end())
-                m_NodeStack.insert(std::make_pair(node.id(), std::deque<citygml::IntermediateNode>()));
+            auto const nodeIter = m_NodeStack.emplace(node.id(), std::unordered_map<std::string, citygml::IntermediateNode>{}).first;
 
-            auto rootElements = m_NodeStack.at("root");
-            for (auto& rootElement : rootElements)
+            for (auto& rootElement : parentIter->second)
             {
-                m_NodeStack.at(node.id()).push_back(rootElement);
+                nodeIter->second.emplace(rootElement.first, rootElement.second);
             }
 
-            m_NodeStack.at("root").clear();
+            parentIter->second.clear();
         }
 
         if (toBack)
         {
-            m_NodeStack.at(parentId).push_back(node);
+            parentIter->second.emplace(node.id(), node);
         }
         else
         {
-            m_NodeStack.at(parentId).push_front(node);
+            parentIter->second.emplace(node.id(), node);
         }
     }
 
