@@ -5,10 +5,10 @@ namespace citygml {
 
     std::string HierarchyTracker::getPreviousParentId(std::string currentParentId, std::shared_ptr<citygml::CityGMLLogger> logger) const
     {
-        for (auto& pair : m_NodeStack)
+        auto const map = m_idToNodeAndParentMap.find(currentParentId);
+        if (map != m_idToNodeAndParentMap.end())
         {
-            if (pair.second.find(currentParentId) != pair.second.end())
-                return pair.first;
+            return map->second.second;
         }
 
         if (currentParentId != "root")
@@ -28,25 +28,13 @@ namespace citygml {
         
         while (!currentId.empty() || currentId == "root")
         {
-            std::string parentId = getPreviousParentId(currentId, logger);
-            if (parentId.empty())
+            auto const nodeAndParent = m_idToNodeAndParentMap.find(currentId);
+            if (nodeAndParent == m_idToNodeAndParentMap.end())
                 return pathToRoot;
 
-            // Now look for the details of the node from the parent
-            auto parentChildren = m_NodeStack.at(parentId);
-            auto nodeIt = parentChildren.find(currentId);
-            if (nodeIt != parentChildren.end())
-            {
-                // Found the node in the parent's children
-                std::string idBlock = nodeIt->first.empty() ? "" : "[" + nodeIt->first + "]";
-                pathToRoot = nodeIt->second.name() + idBlock + "\\" + pathToRoot;
-                currentId = parentId;
-            }
-            else
-            {
-                // force search to end
-                currentId = "";
-            }
+            std::string idBlock = currentId.empty() ? "" : "[" + currentId + "]";
+            pathToRoot = nodeAndParent->second.first.name() + idBlock + "\\" + pathToRoot;
+            currentId = nodeAndParent->second.second;
         }
 
         return pathToRoot;
@@ -54,22 +42,18 @@ namespace citygml {
 
     void HierarchyTracker::pushIntermediateNode(const IntermediateNode& node, const std::string& parentId)
     {
-        auto const parentIter = m_NodeStack.emplace(parentId, std::unordered_map<std::string, citygml::IntermediateNode>{}).first;
+        m_idToNodeAndParentMap.emplace(node.id(), std::make_pair(node, parentId));
 
-        // if replacing the root then root elements are moved to become children of the new element
+        // if replacing the root then the root element is moved to become a child of the new element
         if (parentId == "root")
         {
-            auto const nodeIter = m_NodeStack.emplace(node.id(), std::unordered_map<std::string, citygml::IntermediateNode>{}).first;
-
-            for (auto& rootElement : parentIter->second)
+            if (!m_rootChild.empty())
             {
-                nodeIter->second.emplace(rootElement.first, rootElement.second);
+                m_idToNodeAndParentMap.at(m_rootChild).second = node.id();
             }
 
-            parentIter->second.clear();
+            m_rootChild = node.id();
         }
-
-        parentIter->second.emplace(node.id(), node);
     }
 
 }

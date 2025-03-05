@@ -8,7 +8,7 @@
 #include <string>
 #include <map>
 #include <memory>
-#include <unordered_map>
+#include <utility>
 
 
 namespace citygml {
@@ -22,8 +22,8 @@ namespace citygml {
 
     private:
         PRAGMA_WARN_DLL_BEGIN
-        // Keyed on parent ids
-        std::map<std::string, std::unordered_map<std::string, IntermediateNode>> m_NodeStack;
+        std::map<std::string, std::pair<IntermediateNode, std::string>> m_idToNodeAndParentMap;
+        std::string m_rootChild;
         PRAGMA_WARN_DLL_END
     };
     
