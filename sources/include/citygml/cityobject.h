@@ -7,6 +7,7 @@
 #include <citygml/featureobject.h>
 #include <citygml/citygml_api.h>
 #include <citygml/enum_type_bitmask.h>
+#include <citygml/hierarchyTracker.h>
 #include <citygml/rectifiedgridcoverage.h>
 #include <citygml/externalreference.h>
 #include <citygml/warnings.h>
@@ -21,9 +22,8 @@ namespace citygml {
     class CityGMLLogger;
     class AppearanceManager;
     class Address;
-    class IntermediateNode;
 
-    class LIBCITYGML_EXPORT CityObject : public FeatureObject
+    class LIBCITYGML_EXPORT CityObject : public FeatureObject, public HierarchyTracker
     {
     public:
 
@@ -132,10 +132,6 @@ namespace citygml {
 
         void addChildCityObject(CityObject* cityObj);
 
-        void pushIntermediateNode(const IntermediateNode& node, const std::string& parentId);
-        std::string getPreviousParentId(std::string currentParentId, std::shared_ptr<citygml::CityGMLLogger> logger) const;
-        std::string getNodeStackPath(const std::string& startNodeId, std::shared_ptr<citygml::CityGMLLogger> logger) const;
-
         // Access address
         const Address* address() const;
         void setAddress(std::unique_ptr<Address>&& address);
@@ -162,9 +158,6 @@ namespace citygml {
         std::unique_ptr<Address> m_address;
         std::unique_ptr<RectifiedGridCoverage> m_rectifiedGridCoverage;
         std::unique_ptr<ExternalReference> m_externalReference;
-
-        // Keyed on parent ids
-        std::map<std::string, std::unordered_map<std::string, IntermediateNode>> m_NodeStack;
         PRAGMA_WARN_DLL_END
     };
 
