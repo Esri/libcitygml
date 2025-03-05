@@ -74,6 +74,7 @@ SET(SOURCES
   src/citygml/appearancemanager.cpp
   src/citygml/cityobject.cpp
   src/citygml/geometry.cpp
+  src/citygml/hierarchyTracker.cpp
   src/citygml/implictgeometry.cpp
   src/citygml/linearring.cpp
   src/citygml/polygon.cpp
@@ -167,6 +168,7 @@ SET(PUBLIC_HEADER
   include/citygml/externalreference.h
   include/citygml/warnings.h
   include/citygml/intermediateNode.h
+  include/citygml/hierarchyTracker.h
 )
 
 

@@ -7,7 +7,7 @@
 
 #include <citygml/citygml_api.h>
 #include <citygml/appearancetarget.h>
-#include <citygml/intermediateNode.h>
+#include <citygml/hierarchyTracker.h>
 #include <citygml/warnings.h>
 
 class TesselatorBase;
@@ -22,7 +22,7 @@ namespace citygml {
     class CityGMLFactory;
     class CityGMLLogger;
 
-    class LIBCITYGML_EXPORT Geometry : public AppearanceTarget
+    class LIBCITYGML_EXPORT Geometry : public AppearanceTarget, public HierarchyTracker
     {
         friend class CityGMLFactory;
     public:
@@ -55,9 +55,6 @@ namespace citygml {
         const Geometry& getGeometry( unsigned int i ) const;
         Geometry& getGeometry( unsigned int i );
         void addGeometry(Geometry* geom);
-        void pushIntermediateNode(const IntermediateNode& node, const std::string& parentId);
-        std::string getPreviousParentId(std::string currentParentId, std::shared_ptr<citygml::CityGMLLogger> logger) const;
-        std::string getNodeStackPath(const std::string& startNodeId, std::shared_ptr<citygml::CityGMLLogger> logger) const;
         GeometryType getType() const;
 
         std::string getTypeAsString() const;
@@ -94,9 +91,6 @@ namespace citygml {
 
         PRAGMA_WARN_DLL_BEGIN
         std::string m_srsName;
-
-        // Keyed on parent ids
-        std::map<std::string, std::unordered_map<std::string, IntermediateNode>> m_NodeStack;
 
         std::vector<std::shared_ptr<Geometry> > m_childGeometries;
 
