@@ -43,6 +43,7 @@
 #include <citygml/material.h>
 #include <citygml/texture.h>
 #include <citygml/tesselator.h>
+#include <citygml/utils.h>
 #include <citygml/citygmllogger.h>
 
 #include <algorithm>
