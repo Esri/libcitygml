@@ -15,7 +15,7 @@ namespace citygml {
         //
     }
 
-    NodeType::XMLNode::XMLNode(std::string prefix, std::string name ) : m_name(toLower(name)), m_prefix(toLower(prefix))
+    NodeType::XMLNode::XMLNode(std::string prefix, std::string name ) : m_name(name), m_prefix(toLower(prefix))
     {
         m_typeID = NodeType::typeCount++;
     }
