@@ -62,31 +62,31 @@ namespace citygml {
             throw std::runtime_error("TextureElementParser::parseChildElementStartTag called before TextureElementParser::parseElementStartTag");
         }
 
-        if (node == NodeType::APP_ImageURINode
-            || node == NodeType::APP_TextureTypeNode
-            || node == NodeType::APP_WrapModeNode
-            || node == NodeType::APP_BorderColorNode
+        if (node == NodeType::APP_imageURINode
+            || node == NodeType::APP_textureTypeNode
+            || node == NodeType::APP_wrapModeNode
+            || node == NodeType::APP_borderColorNode
             || node == NodeType::APP_TexCoordListNode
-            || node == NodeType::APP_IsFrontNode
-            || node == NodeType::APP_MimeTypeNode) {
+            || node == NodeType::APP_isFrontNode
+            || node == NodeType::APP_mimeTypeNode) {
             return true;
-        } else if (node == NodeType::APP_TargetNode) {
+        } else if (node == NodeType::APP_targetNode) {
             if (m_currentTexTargetDef != nullptr) {
                 CITYGML_LOG_WARN(m_logger, "Nested texture target definition detected at: " << getDocumentLocation());
             } else {
                 m_currentTexTargetDef = m_factory.createTextureTargetDefinition(parseReference(attributes.getAttribute("uri"), m_logger, getDocumentLocation()), m_model, attributes.getCityGMLIDAttribute());
             }
             return true;
-        } else if (node == NodeType::APP_TextureCoordinatesNode) {
+        } else if (node == NodeType::APP_textureCoordinatesNode) {
             if (m_currentTexTargetDef == nullptr) {
-                CITYGML_LOG_WARN(m_logger, "Found texture coordinates node (" << NodeType::APP_TextureCoordinatesNode << ") outside Texture target node at: " << getDocumentLocation());
+                CITYGML_LOG_WARN(m_logger, "Found texture coordinates node (" << NodeType::APP_textureCoordinatesNode << ") outside Texture target node at: " << getDocumentLocation());
             } else if (m_currentTexCoords != nullptr) {
                 CITYGML_LOG_WARN(m_logger, "Nested texture coordinates definition detected at: " << getDocumentLocation());
             } else {
                 m_currentTexCoords = std::make_shared<TextureCoordinates>(attributes.getCityGMLIDAttribute(), parseReference(attributes.getAttribute("ring"), m_logger, getDocumentLocation()));
             }
             return true;
-        } else if (node == NodeType::APP_TextureParameterizationNode) {
+        } else if (node == NodeType::APP_textureParameterizationNode) {
             setParserForNextElement(new TextureAssociationElementParser(m_documentParser, m_factory, m_logger, m_model));
             return true;
         }
@@ -100,30 +100,30 @@ namespace citygml {
             throw std::runtime_error("TextureElementParser::parseChildElementEndTag called before TextureElementParser::parseElementStartTag");
         }
 
-        if (node == NodeType::APP_ImageURINode) {
+        if (node == NodeType::APP_imageURINode) {
 
             m_model->setUrl(characters);
-        } else if (node == NodeType::APP_TextureTypeNode) {
+        } else if (node == NodeType::APP_textureTypeNode) {
 
             m_model->setAttribute(node.name(), characters);
-        } else if (node == NodeType::APP_TextureParameterizationNode) {
+        } else if (node == NodeType::APP_textureParameterizationNode) {
             // Do nothing (target and texture coords are set in child element)
-        } else if (node == NodeType::APP_WrapModeNode) {
+        } else if (node == NodeType::APP_wrapModeNode) {
 
             if (!m_model->setWrapModeFromString(characters)) {
                 CITYGML_LOG_WARN(m_logger, "Unknown texture wrap mode " << characters << " at: " << getDocumentLocation());
             }
-        } else if (node == NodeType::APP_IsFrontNode) {
+        } else if (node == NodeType::APP_isFrontNode) {
 
             m_model->setIsFront(parseValue<bool>(characters, m_logger, getDocumentLocation()));
-        } else if (node == NodeType::APP_BorderColorNode) {
+        } else if (node == NodeType::APP_borderColorNode) {
 
             std::vector<float> colorValues = parseVecList<float>(characters, m_logger, getDocumentLocation());
             colorValues.push_back(1.f); // if 3 values are given, the fourth (alpha) is set to 1.0 by default
             if (colorValues.size() >= 4) {
                 m_model->setBorderColor(TVec4f(colorValues[0], colorValues[1], colorValues[2], colorValues[3]));
             } else {
-                CITYGML_LOG_WARN(m_logger, "Expected 3 or more float values in node " << NodeType::APP_BorderColorNode << " but got " << colorValues.size() << " at: " << getDocumentLocation());
+                CITYGML_LOG_WARN(m_logger, "Expected 3 or more float values in node " << NodeType::APP_borderColorNode << " but got " << colorValues.size() << " at: " << getDocumentLocation());
             }
         } else if (node == NodeType::APP_TexCoordListNode) {
 
@@ -132,19 +132,19 @@ namespace citygml {
                 m_currentTexCoords = nullptr;
             }
 
-        } else if (node == NodeType::APP_TextureCoordinatesNode) {
+        } else if (node == NodeType::APP_textureCoordinatesNode) {
 
             if (m_currentTexCoords != nullptr && m_currentTexTargetDef != nullptr) {
                 m_currentTexCoords->setCoords(parseVecList<TVec2f>(characters, m_logger, getDocumentLocation()));
                 m_currentTexTargetDef->addTexCoordinates(m_currentTexCoords);
                 m_currentTexCoords = nullptr;
             } else {
-                CITYGML_LOG_WARN(m_logger, "Unexpected end tag <" << NodeType::APP_TextureCoordinatesNode << " at: " << getDocumentLocation());
+                CITYGML_LOG_WARN(m_logger, "Unexpected end tag <" << NodeType::APP_textureCoordinatesNode << " at: " << getDocumentLocation());
             }
-        } else if (node == NodeType::APP_TargetNode) {
+        } else if (node == NodeType::APP_targetNode) {
 
             m_currentTexTargetDef = nullptr;
-        } else if (node == NodeType::APP_MimeTypeNode) {
+        } else if (node == NodeType::APP_mimeTypeNode) {
             m_model->setAttribute(node.name(), characters);
         } else {
             return GMLObjectElementParser::parseChildElementEndTag(node, characters);

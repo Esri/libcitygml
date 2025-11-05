@@ -116,17 +116,17 @@ namespace citygml {
         IntermediateNode intermediateNode(node.prefix(), node.baseName(), nodeId);
         m_model->pushIntermediateNode(intermediateNode, m_currentParentId);
         m_currentParentId = nodeId;
-        if (node == NodeType::GML_InteriorNode
-         || node == NodeType::GML_ExteriorNode
-         || node == NodeType::GML_SolidMemberNode) {
+        if (node == NodeType::GML_interiorNode
+         || node == NodeType::GML_exteriorNode
+         || node == NodeType::GML_solidMemberNode) {
 
             setParserForNextElement(new GeometryElementParser(m_documentParser, m_factory, m_logger, m_lodLevel, m_parentType, [this](Geometry* child) {
                                         m_model->addGeometry(child);
                                     }));
             return true;
 
-        } else if (node == NodeType::GML_SurfaceMemberNode
-                   || node == NodeType::GML_BaseSurfaceNode) {
+        } else if (node == NodeType::GML_surfaceMemberNode
+                   || node == NodeType::GML_baseSurfaceNode) {
 
             if (attributes.hasXLinkAttribute()) {
                 m_factory.requestSharedPolygonForGeometry(m_model, attributes.getXLinkValue());
@@ -144,8 +144,8 @@ namespace citygml {
                 setParserForNextElement(new DelayedChoiceElementParser(m_documentParser, m_logger, parsers));
             }
             return true;
-        } else if (node == NodeType::GML_PatchesNode
-                   || node == NodeType::GML_TrianglePatchesNode) {
+        } else if (node == NodeType::GML_patchesNode
+                   || node == NodeType::GML_trianglePatchesNode) {
 
             std::function<ElementParser*()> patchParserFactory = [this]() {
                 return new PolygonElementParser(m_documentParser, m_factory, m_logger, [this](std::shared_ptr<Polygon> poly) {m_model->addPolygon(poly);});
@@ -171,13 +171,13 @@ namespace citygml {
             m_currentParentId = parentId;
         }
 
-        if (node == NodeType::GML_InteriorNode
-         || node == NodeType::GML_ExteriorNode
-         || node == NodeType::GML_SolidMemberNode
-         || node == NodeType::GML_SurfaceMemberNode
-         || node == NodeType::GML_BaseSurfaceNode
-         || node == NodeType::GML_PatchesNode
-         || node == NodeType::GML_TrianglePatchesNode)  {
+        if (node == NodeType::GML_interiorNode
+         || node == NodeType::GML_exteriorNode
+         || node == NodeType::GML_solidMemberNode
+         || node == NodeType::GML_surfaceMemberNode
+         || node == NodeType::GML_baseSurfaceNode
+         || node == NodeType::GML_patchesNode
+         || node == NodeType::GML_trianglePatchesNode)  {
             return true;
         }
 

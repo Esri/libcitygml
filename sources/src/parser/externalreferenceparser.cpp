@@ -17,7 +17,7 @@ namespace citygml {
     }
 
     bool ExternalReferenceParser::handlesElement(NodeType::XMLNode const& node) const {
-        return (node.typeID() == NodeType::CORE_ExternalReferenceNode.typeID() || node.typeID() == NodeType::CORE_InformationSystemNode.typeID());
+        return (node.typeID() == NodeType::CORE_ExternalReferenceNode.typeID() || node.typeID() == NodeType::CORE_informationSystemNode.typeID());
     }
 
     bool ExternalReferenceParser::parseElementStartTag(NodeType::XMLNode const& node, Attributes & attributes) {
@@ -40,10 +40,10 @@ namespace citygml {
             throw std::runtime_error("ExternalReferenceParser::parseChildElementStartTag called before ExternalReferenceParser::parseElementStartTag");
         }
         
-        if (node == NodeType::CORE_ExternalObjectNode
-            || node == NodeType::CORE_InformationSystemNode
-            || node == NodeType::CORE_NameNode
-            || node == NodeType::CORE_UriNode) {
+        if (node == NodeType::CORE_externalObjectNode
+            || node == NodeType::CORE_informationSystemNode
+            || node == NodeType::CORE_nameNode
+            || node == NodeType::CORE_uriNode) {
             return true;
         }
         
@@ -55,13 +55,13 @@ namespace citygml {
             throw std::runtime_error("ExternalReferenceParser::parseChildElementEndTag called before ExternalReferenceParser::parseElementStartTag");
         }
         
-        if (node == NodeType::CORE_ExternalObjectNode) {
+        if (node == NodeType::CORE_externalObjectNode) {
             return true;
-        } else if (node == NodeType::CORE_InformationSystemNode) {
+        } else if (node == NodeType::CORE_informationSystemNode) {
             model->informationSystem = characters;
-        } else if (node == NodeType::CORE_NameNode) {
+        } else if (node == NodeType::CORE_nameNode) {
             model->externalObject.setName(characters);
-        } else if (node == NodeType::CORE_UriNode) {
+        } else if (node == NodeType::CORE_uriNode) {
             model->externalObject.setUri(characters);
         }
         

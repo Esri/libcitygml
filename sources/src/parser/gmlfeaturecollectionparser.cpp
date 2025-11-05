@@ -34,9 +34,9 @@ namespace citygml {
             throw std::runtime_error("Invalid call to GMLFeatureCollectionElementParser::parseChildElementStartTag");
         }
 
-        if (node == NodeType::GML_LowerCornerNode
-                || node == NodeType::GML_UpperCornerNode
-                || node == NodeType::GML_BoundedByNode) {
+        if (node == NodeType::GML_lowerCornerNode
+                || node == NodeType::GML_upperCornerNode
+                || node == NodeType::GML_boundedByNode) {
             return true;
         } else if (node == NodeType::GML_EnvelopeNode) {
 
@@ -60,27 +60,27 @@ namespace citygml {
             throw std::runtime_error("Invalid call to GMLFeatureCollectionElementParser::parseChildElementEndTag");
         }
 
-        if (node == NodeType::GML_LowerCornerNode) {
+        if (node == NodeType::GML_lowerCornerNode) {
 
             if (m_bounds != nullptr) {
                 m_bounds->setLowerBound(parseValue<TVec3d>(characters, m_logger, getDocumentLocation()));
             } else {
-                CITYGML_LOG_WARN(m_logger, "Definition of " << NodeType::GML_LowerCornerNode << " outside " << NodeType::GML_EnvelopeNode << " at " << getDocumentLocation());
+                CITYGML_LOG_WARN(m_logger, "Definition of " << NodeType::GML_lowerCornerNode << " outside " << NodeType::GML_EnvelopeNode << " at " << getDocumentLocation());
             }
             return true;
-        } else if (node == NodeType::GML_UpperCornerNode) {
+        } else if (node == NodeType::GML_upperCornerNode) {
 
             if (m_bounds != nullptr) {
                 m_bounds->setUpperBound(parseValue<TVec3d>(characters, m_logger, getDocumentLocation()));
             } else {
-                CITYGML_LOG_WARN(m_logger, "Definition of " << NodeType::GML_UpperCornerNode << " outside " << NodeType::GML_EnvelopeNode << " at " << getDocumentLocation());
+                CITYGML_LOG_WARN(m_logger, "Definition of " << NodeType::GML_upperCornerNode << " outside " << NodeType::GML_EnvelopeNode << " at " << getDocumentLocation());
             }
             return true;
         } else if (node == NodeType::GML_EnvelopeNode) {
 
             getFeatureObject()->setEnvelope(m_bounds);
             return true;
-        } else if (node == NodeType::GML_BoundedByNode) {
+        } else if (node == NodeType::GML_boundedByNode) {
 
             return true;
         }

@@ -16,11 +16,11 @@ namespace citygml {
             throw std::runtime_error("Invalid call to GMLObjectElementParser::parseChildElementStartTag");
         }
 
-        if (   node == NodeType::GML_DescriptionNode
-            || node == NodeType::GML_IdentifierNode
-            || node == NodeType::GML_NameNode
-            || node == NodeType::GML_DescriptionReferenceNode
-            || node == NodeType::GML_MetaDataPropertyNode) {
+        if (   node == NodeType::GML_descriptionNode
+            || node == NodeType::GML_identifierNode
+            || node == NodeType::GML_nameNode
+            || node == NodeType::GML_descriptionReferenceNode
+            || node == NodeType::GML_metaDataPropertyNode) {
 
             return true;
         }
@@ -34,11 +34,11 @@ namespace citygml {
             throw std::runtime_error("Invalid call to GMLObjectElementParser::parseChildElementEndTag");
         }
 
-        if (   node == NodeType::GML_DescriptionNode
-            || node == NodeType::GML_IdentifierNode
-            || node == NodeType::GML_NameNode
-            || node == NodeType::GML_DescriptionReferenceNode
-            || node == NodeType::GML_MetaDataPropertyNode) {
+        if (   node == NodeType::GML_descriptionNode
+            || node == NodeType::GML_identifierNode
+            || node == NodeType::GML_nameNode
+            || node == NodeType::GML_descriptionReferenceNode
+            || node == NodeType::GML_metaDataPropertyNode) {
 
                 getObject()->setAttribute(node.name(), characters);
                 return true;

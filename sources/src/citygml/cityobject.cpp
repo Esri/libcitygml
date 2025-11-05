@@ -249,7 +249,7 @@ namespace citygml {
             return "WaterBody";
         case CityObject::CityObjectsType::COT_ReliefFeature:
             return "ReliefFeature";
-        case CityObject::CityObjectsType::COT_ReliefComponent:
+        case CityObject::CityObjectsType::COT_reliefComponent:
             return "ReliefComponent";
         case CityObject::CityObjectsType::COT_TINRelief:
             return "TINRelief";
@@ -271,9 +271,9 @@ namespace citygml {
             return "BridgeInstallation";
         case CityObject::CityObjectsType::COT_BridgePart:
             return "BridgePart";
-        case CityObject::CityObjectsType::COT_OuterBridgeConstruction:
+        case CityObject::CityObjectsType::COT_outerBridgeConstruction:
             return "OuterBridgeConstruction";
-        case CityObject::CityObjectsType::COT_OuterBridgeInstallation:
+        case CityObject::CityObjectsType::COT_outerBridgeInstallation:
             return "OuterBridgeInstallation";
         case CityObject::CityObjectsType::COT_BuildingPart:
             return "BuildingPart";
@@ -313,13 +313,13 @@ namespace citygml {
             return "TrafficSpace";
         case CityObject::CityObjectsType::COT_AuxiliaryTrafficSpace:
             return "AuxiliaryTrafficSpace";
-        case CityObject::CityObjectsType::COT_FillingSurface:
+        case CityObject::CityObjectsType::COT_fillingSurface:
             return "FillingSurface";
         case CityObject::CityObjectsType::COT_WindowSurface:
             return "WindowSurface";
         case CityObject::CityObjectsType::COT_DoorSurface:
             return "DoorSurface";
-        case CityObject::CityObjectsType::COT_BuildingSubdivision:
+        case CityObject::CityObjectsType::COT_buildingSubdivision:
             return "BuildingSubdivision";
         case CityObject::CityObjectsType::COT_Storey:
             return "Storey";
@@ -366,8 +366,8 @@ namespace citygml {
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_BridgeConstructionElement), CityObject::CityObjectsType::COT_BridgeConstructionElement},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_BridgeInstallation), CityObject::CityObjectsType::COT_BridgeInstallation},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_BridgePart), CityObject::CityObjectsType::COT_BridgePart},
-         {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_OuterBridgeConstruction), CityObject::CityObjectsType::COT_OuterBridgeConstruction},
-         {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_OuterBridgeInstallation), CityObject::CityObjectsType::COT_OuterBridgeInstallation},
+         {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_outerBridgeConstruction), CityObject::CityObjectsType::COT_outerBridgeConstruction},
+         {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_outerBridgeInstallation), CityObject::CityObjectsType::COT_outerBridgeInstallation},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_BuildingPart), CityObject::CityObjectsType::COT_BuildingPart},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_WallSurface), CityObject::CityObjectsType::COT_WallSurface},
          {cityObjectsTypeToLowerString(CityObject::CityObjectsType::COT_RoofSurface), CityObject::CityObjectsType::COT_RoofSurface},

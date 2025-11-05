@@ -62,7 +62,7 @@ namespace citygml {
             throw std::runtime_error("LinearRingElementParser::parseChildElementStartTag called before LinearRingElementParser::parseElementStartTag");
         }
 
-        if (node == NodeType::GML_PosListNode || node == NodeType::GML_PosNode) {
+        if (node == NodeType::GML_posListNode || node == NodeType::GML_posNode) {
             std::string dimensions = attributes.getAttribute("srsDimension", "3");
             if (dimensions != "3") {
                 CITYGML_LOG_WARN(m_logger, "Attribute srsDimension of element " << node << " contains unsupported value '" << dimensions << "' (only 3 dimensions are support). Trying to parse it anyway...");
@@ -80,10 +80,10 @@ namespace citygml {
             throw std::runtime_error("LinearRingElementParser::parseChildElementEndTag called before LinearRingElementParser::parseElementStartTag");
         }
 
-        if (node == NodeType::GML_PosListNode) {
+        if (node == NodeType::GML_posListNode) {
             m_model->setVertices(parseVecList<TVec3d>(characters, m_logger, getDocumentLocation()));
             return true;
-        } else if (node == NodeType::GML_PosNode) {
+        } else if (node == NodeType::GML_posNode) {
             m_model->addVertex(parseValue<TVec3d>(characters, m_logger, getDocumentLocation()));
             return true;
         }

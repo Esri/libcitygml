@@ -60,8 +60,8 @@ namespace citygml {
             throw std::runtime_error("LineStringElementParser::parseChildElementStartTag called before LineStringElementParser::parseElementStartTag");
         }
 
-        if (node == NodeType::GML_PosListNode
-                || node == NodeType::GML_PosNode) {
+        if (node == NodeType::GML_posListNode
+                || node == NodeType::GML_posNode) {
             parseDimension(attributes);
             return true;
         }
@@ -76,11 +76,11 @@ namespace citygml {
             throw std::runtime_error("LineStringElementParser::parseChildElementEndTag called before LineStringElementParser::parseElementStartTag");
         }
 
-        if (node == NodeType::GML_PosListNode
-                || node == NodeType::GML_PosNode) {
+        if (node == NodeType::GML_posListNode
+                || node == NodeType::GML_posNode) {
 
             if (m_model->getDimensions() < 0) {
-                CITYGML_LOG_ERROR(m_logger, "No srsDimension given for LineString before or as attribute of <" << NodeType::GML_PosListNode << "> child element at " << getDocumentLocation());
+                CITYGML_LOG_ERROR(m_logger, "No srsDimension given for LineString before or as attribute of <" << NodeType::GML_posListNode << "> child element at " << getDocumentLocation());
             } else if (m_model->getDimensions() == 2) {
                 m_model->setVertices2D(parseVecList<TVec2d>(characters, m_logger, getDocumentLocation()));
             } else if (m_model->getDimensions() == 3) {

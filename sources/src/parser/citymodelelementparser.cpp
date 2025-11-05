@@ -66,13 +66,13 @@ namespace citygml {
             throw std::runtime_error("CityModelElementParser::parseChildElementStartTag called before CityModelElementParser::parseElementStartTag");
         }
 
-        if (node == NodeType::CORE_CityObjectMemberNode) {
+        if (node == NodeType::CORE_cityObjectMemberNode) {
             setParserForNextElement(new CityObjectElementParser(m_documentParser, m_factory, m_logger, [this](CityObject* obj) {
                                         this->m_model->addRootObject(obj);
                                     }));
             return true;
         } else if (node == NodeType::APP_AppearanceNode // Compatibility with CityGML 1.0 (in CityGML 2 CityObjects can only contain appearanceMember elements)
-                   || node == NodeType::APP_AppearanceMemberNode) {
+                   || node == NodeType::APP_appearanceMemberNode) {
 
             setParserForNextElement(new AppearanceElementParser(m_documentParser, m_factory, m_logger));
             return true;
@@ -88,9 +88,9 @@ namespace citygml {
             throw std::runtime_error("CityModelElementParser::parseChildElementEndTag called before CityModelElementParser::parseElementStartTag");
         }
 
-        if (node == NodeType::CORE_CityObjectMemberNode
+        if (node == NodeType::CORE_cityObjectMemberNode
          || node == NodeType::APP_AppearanceNode
-         || node == NodeType::APP_AppearanceMemberNode) {
+         || node == NodeType::APP_appearanceMemberNode) {
             return true;
         } else {
             return GMLFeatureCollectionElementParser::parseChildElementEndTag(node, characters);

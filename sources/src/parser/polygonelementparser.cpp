@@ -77,11 +77,11 @@ namespace citygml {
             throw std::runtime_error("PolygonElementParser::parseChildElementStartTag called before PolygonElementParser::parseElementStartTag");
         }
 
-        if (node == NodeType::GML_InteriorNode) {
+        if (node == NodeType::GML_interiorNode) {
 
             parseRingElement(true);
             return true;
-        } else if (node == NodeType::GML_ExteriorNode) {
+        } else if (node == NodeType::GML_exteriorNode) {
 
             parseRingElement(false);
             return true;
@@ -97,7 +97,7 @@ namespace citygml {
             throw std::runtime_error("PolygonElementParser::parseChildElementEndTag called before PolygonElementParser::parseElementStartTag");
         }
 
-        if (node == NodeType::GML_InteriorNode || node == NodeType::GML_ExteriorNode) {
+        if (node == NodeType::GML_interiorNode || node == NodeType::GML_exteriorNode) {
 
             return true;
         }

@@ -71,9 +71,9 @@ namespace citygml {
 
     bool AppearanceElementParser::parseChildElementStartTag(const NodeType::XMLNode& node, Attributes& attributes)
     {
-        if (node == NodeType::APP_ThemeNode) {
+        if (node == NodeType::APP_themeNode) {
             return true;
-        } else if (node == NodeType::APP_SurfaceDataMemberNode || node == NodeType::APP_SurfaceDataNode) {
+        } else if (node == NodeType::APP_SurfaceDataMemberNode || node == NodeType::APP_surfaceDataNode) {
 
             if (attributes.hasXLinkAttribute()) {
                 // surfaceDataMemberNode links to an existing surfaceData member
@@ -106,13 +106,13 @@ namespace citygml {
 
     bool AppearanceElementParser::parseChildElementEndTag(const NodeType::XMLNode& node, const std::string& characters)
     {
-        if (node == NodeType::APP_ThemeNode) {
+        if (node == NodeType::APP_themeNode) {
             if (!m_theme.empty()) {
                 CITYGML_LOG_WARN(m_logger, "Duplicate definition of theme in appearance node at " << getDocumentLocation() << ". Overwriting last theme '" << m_theme << "' with '" << characters << "'");
             }
             m_theme = characters;
             return true;
-        } else if (node == NodeType::APP_SurfaceDataMemberNode || node == NodeType::APP_SurfaceDataNode) {
+        } else if (node == NodeType::APP_SurfaceDataMemberNode || node == NodeType::APP_surfaceDataNode) {
             return true;
         }
         return GMLObjectElementParser::parseChildElementEndTag(node, characters);

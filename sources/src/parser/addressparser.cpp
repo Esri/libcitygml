@@ -55,8 +55,8 @@ namespace citygml {
                 if (!g_nodeSetsInitialized) {
                     k_rootElements = {
                         NodeType::CORE_AddressNode,
-                        NodeType::BLDG_AddressNode,
-                        NodeType::CORE_XalAddressNode
+                        NodeType::BLDG_addressNode,
+                        NodeType::CORE_xalAddressNode
                     };
 
                     k_subElements = {

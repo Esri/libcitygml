@@ -44,7 +44,7 @@ namespace citygml {
             COT_SolitaryVegetationObject,
             COT_WaterBody,
             COT_ReliefFeature,
-            COT_ReliefComponent,
+            COT_reliefComponent,
             COT_TINRelief,
             COT_MassPointRelief,
             COT_BreaklineRelief,
@@ -87,16 +87,16 @@ namespace citygml {
             COT_Waterway,
             COT_BuildingConstructiveElement,
             COT_BuildingRoom,
-            COT_FillingSurface,
+            COT_fillingSurface,
             COT_WindowSurface,
             COT_DoorSurface,
 
-            COT_BuildingSubdivision,
+            COT_buildingSubdivision,
             COT_Storey,
             COT_PointCloud,
-            COT_OuterBridgeConstruction,
+            COT_outerBridgeConstruction,
             COT_OtherConstruction,
-            COT_OuterBridgeInstallation,
+            COT_outerBridgeInstallation,
 
             COT_All
         };

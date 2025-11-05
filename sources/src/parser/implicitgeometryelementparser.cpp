@@ -67,10 +67,10 @@ namespace citygml {
             throw std::runtime_error("ImplicitGeometryElementParser::parseChildElementStartTag called before ImplicitGeometryElementParser::parseElementStartTag");
         }
 
-        if (   node == NodeType::CORE_TransformationMatrixNode
-            || node == NodeType::CORE_ReferencePointNode
-            || node == NodeType::GML_ReferencePointNode
-            || node == NodeType::CORE_MimeTypeNode) {
+        if (   node == NodeType::CORE_transformationMatrixNode
+            || node == NodeType::CORE_referencePointNode
+            || node == NodeType::GML_referencePointNode
+            || node == NodeType::CORE_mimeTypeNode) {
 
             return true;
 
@@ -78,15 +78,15 @@ namespace citygml {
 
             m_model->setSRSName(attributes.getAttribute("srsName"));
             return true;
-        } else if (node == NodeType::GML_PosNode) {
+        } else if (node == NodeType::GML_posNode) {
 
             std::string srsDimension = attributes.getAttribute("srsDimension","3");
             if (srsDimension != "3") {
-                CITYGML_LOG_WARN(m_logger, NodeType::GML_PosNode << " element at " << getDocumentLocation() << " in ImplicitGeometry node has an unsupported 'srsDimension' attribute value of " << srsDimension
+                CITYGML_LOG_WARN(m_logger, NodeType::GML_posNode << " element at " << getDocumentLocation() << " in ImplicitGeometry node has an unsupported 'srsDimension' attribute value of " << srsDimension
                                  << " (Only 3 is supported). Trying to parse it anyway.");
             }
             return true;
-        } else if (node == NodeType::CORE_RelativeGMLGeometryNode) {
+        } else if (node == NodeType::CORE_relativeGMLGeometryNode) {
 
             if (attributes.hasXLinkAttribute()) {
 
@@ -113,7 +113,7 @@ namespace citygml {
                 }));
             }
             return true;
-        } else if (node == NodeType::CORE_RelativeGeometryNode) {
+        } else if (node == NodeType::CORE_relativeGeometryNode) {
 
             if (attributes.hasXLinkAttribute()) {
 
@@ -126,7 +126,7 @@ namespace citygml {
                 }));
             }
             return true;
-        } else if (node == NodeType::CORE_LibraryObjectNode) {
+        } else if (node == NodeType::CORE_libraryObjectNode) {
             CITYGML_LOG_INFO(m_logger, "Skipping ImplicitGeometry child element <" << node  << ">  at " << getDocumentLocation() << " (Currently not supported!)");
             setParserForNextElement(new SkipElementParser(m_documentParser, m_logger));
             return true;
@@ -142,24 +142,24 @@ namespace citygml {
             throw std::runtime_error("ImplicitGeometryElementParser::parseChildElementEndTag called before ImplicitGeometryElementParser::parseElementStartTag");
         }
 
-        if (node == NodeType::CORE_TransformationMatrixNode) {
+        if (node == NodeType::CORE_transformationMatrixNode) {
 
             m_model->setTransformMatrix(parseMatrix(characters, m_logger, getDocumentLocation()));
             return true;
 
-        } else if (node == NodeType::GML_PosNode) {
+        } else if (node == NodeType::GML_posNode) {
 
             m_model->setReferencePoint(parseValue<TVec3d>(characters, m_logger, getDocumentLocation()));
             return true;
-        } else if (   node == NodeType::CORE_RelativeGMLGeometryNode
-                   || node == NodeType::CORE_RelativeGeometryNode
+        } else if (   node == NodeType::CORE_relativeGMLGeometryNode
+                   || node == NodeType::CORE_relativeGeometryNode
                    || node == NodeType::GML_PointNode
-                   || node == NodeType::CORE_ReferencePointNode
-                   || node == NodeType::GML_ReferencePointNode
-                   || node == NodeType::CORE_LibraryObjectNode) {
+                   || node == NodeType::CORE_referencePointNode
+                   || node == NodeType::GML_referencePointNode
+                   || node == NodeType::CORE_libraryObjectNode) {
 
             return true;
-        } else if (node == NodeType::CORE_MimeTypeNode) {
+        } else if (node == NodeType::CORE_mimeTypeNode) {
             m_model->setAttribute(node.name(), characters);
         }
 

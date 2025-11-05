@@ -55,17 +55,17 @@ namespace citygml {
 
     bool TextureAssociationElementParser::parseChildElementStartTag(const NodeType::XMLNode& node, Attributes& attributes)
     {
-        if (node == NodeType::APP_TextureParameterizationNode
+        if (node == NodeType::APP_textureParameterizationNode
             || node == NodeType::APP_TexCoordListNode
-            || node == NodeType::APP_RingNode) {
+            || node == NodeType::APP_ringNode) {
             return true;
-        } else if (node == NodeType::APP_TargetNode) {
+        } else if (node == NodeType::APP_targetNode) {
             if (!m_lastTargetDefinitionID.empty()) {
                 CITYGML_LOG_WARN(m_logger, "Multiple texture target definitions detected at: " << getDocumentLocation());
             }
             m_lastTargetDefinitionID = attributes.getCityGMLIDAttribute();
             return true;
-        } else if (node == NodeType::APP_TextureCoordinatesNode) {
+        } else if (node == NodeType::APP_textureCoordinatesNode) {
             if (!m_texCoordGmlId.empty()) {
                 CITYGML_LOG_WARN(m_logger, "Multiple texture coordinates definitions detected at: " << getDocumentLocation());
             }
@@ -78,7 +78,7 @@ namespace citygml {
 
     bool TextureAssociationElementParser::parseChildElementEndTag(const NodeType::XMLNode& node, const std::string& characters)
     {
-        if (node == NodeType::APP_TextureParameterizationNode) {
+        if (node == NodeType::APP_textureParameterizationNode) {
             // Do nothing (target and texture coords are set in child elements)
         } else if (node == NodeType::APP_TexCoordListNode) {
             std::shared_ptr<TextureCoordinates> texCoords = std::make_shared<TextureCoordinates>(m_texCoordGmlId, m_ringId);
@@ -89,22 +89,22 @@ namespace citygml {
                 CITYGML_LOG_WARN(m_logger, "TexCoordList node finished before texture target definition was set at " << getDocumentLocation());
             }
 
-        } else if (node == NodeType::APP_TextureCoordinatesNode) {
+        } else if (node == NodeType::APP_textureCoordinatesNode) {
 
             if (m_texCoordData.empty()) {
                 m_texCoordData = parseVecList<TVec2f>(characters, m_logger, getDocumentLocation());
             } else {
-                CITYGML_LOG_WARN(m_logger, "Unexpected end tag <" << NodeType::APP_TextureCoordinatesNode << " at: " << getDocumentLocation());
+                CITYGML_LOG_WARN(m_logger, "Unexpected end tag <" << NodeType::APP_textureCoordinatesNode << " at: " << getDocumentLocation());
             }
-        } else if (node == NodeType::APP_TargetNode) {
+        } else if (node == NodeType::APP_targetNode) {
             if (m_currentTexTargetDef == nullptr) {
                 const std::string uri = parseReference(characters, m_logger, getDocumentLocation());
                 m_currentTexTargetDef = m_factory.createTextureTargetDefinition(uri, m_model, m_lastTargetDefinitionID);
                 m_lastTargetDefinitionID = "";
             } else {
-                CITYGML_LOG_WARN(m_logger, "Unexpected end tag <" << NodeType::APP_TargetNode << " at: " << getDocumentLocation());
+                CITYGML_LOG_WARN(m_logger, "Unexpected end tag <" << NodeType::APP_targetNode << " at: " << getDocumentLocation());
             }
-        } else if (node == NodeType::APP_RingNode) {
+        } else if (node == NodeType::APP_ringNode) {
             m_ringId = parseReference(characters, m_logger, getDocumentLocation());
         } else {
             return GMLObjectElementParser::parseChildElementEndTag(node, characters);
