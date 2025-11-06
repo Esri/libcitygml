@@ -35,6 +35,13 @@ std::pair<T, char const*> readNextNumber(std::string_view const& string) {
                 return !shouldSkip(ch);
             });
             return { result, nextPattern };
+        } else if (errorCode == std::errc::result_out_of_range) {
+            // Be lenient and return the default value when out of range.
+            // E.g. converting -5.359579389737923e-47 to float yields out_of_range
+            char const* const nextPattern = std::find_if(patternEnd, string.data() + string.size(), [](char ch) {
+                return !shouldSkip(ch);
+            });
+            return { T{}, nextPattern };
         }
     }
 
