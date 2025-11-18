@@ -371,22 +371,27 @@ TEST(VecsTests, VecList) {
         std::transform(data.expectedDoubles.begin(), data.expectedDoubles.end(), expectedFloats.begin(), [](double val){ return static_cast<float>(val); });
         ASSERT_THAT(floatVec, testing::ElementsAreArray(expectedFloats));
     }
-    std::vector<double> const doubleVec = citygml::parseVecList<double>(std::string("NaN -NaN +NaN"), noLogger, loc);
+    std::vector<double> const doubleVec = citygml::parseVecList<double>(std::string("NaN -NaN +NaN 5.359579389737923e-47 -5.359579389737923e-47"), noLogger, loc);
     ASSERT_TRUE(std::isnan(doubleVec[0]));
     ASSERT_TRUE(std::isnan(doubleVec[1]));
     ASSERT_TRUE(std::isnan(doubleVec[2]));
-    std::vector<float> const floatVec = citygml::parseVecList<float>(std::string("NaN -NaN +NaN"), noLogger, loc);
+    ASSERT_EQ(5.359579389737923e-47, doubleVec[3]);
+    ASSERT_EQ(-5.359579389737923e-47, doubleVec[4]);
+    std::vector<float> const floatVec = citygml::parseVecList<float>(std::string("NaN -NaN +NaN 5.359579389737923e-47 -5.359579389737923e-47"), noLogger, loc);
     ASSERT_TRUE(std::isnan(floatVec[0]));
     ASSERT_TRUE(std::isnan(floatVec[1]));
     ASSERT_TRUE(std::isnan(floatVec[2]));
+    ASSERT_EQ(0.f, floatVec[3]);
+    ASSERT_EQ(0.f, floatVec[4]);
 
 
-    const std::array<VecListTestData<TVec2d>, 16> TEST_STRINGS_VEC2{
+    const std::array<VecListTestData<TVec2d>, 17> TEST_STRINGS_VEC2{
         VecListTestData<TVec2d>{"0 -1  1 +1  0. -1.  1. +1.  0.0 -1.0  1.0 +1.0"sv, { { 0., -1. }, { 1., 1. }, { 0., -1. }, { 1., 1. }, { 0., -1. }, { 1., 1. } } },
         {"-0.1 0.1  +0.1 -1.1e0  1.1e0 +1.1e0"sv, { { -0.1, 0.1 }, { 0.1, -1.1 }, { 1.1, 1.1 } } },
         {"-1.1e10 1.1e10  +1.1e10 -1.1e-10  1.1e-10 +1.1e-10  -1.1e+10 1.1e+10  +1.1e+10 0"sv, { { -1.1e10, 1.1e10 }, { 1.1e10, -1.1e-10 }, { 1.1e-10, 1.1e-10 }, { -1.1e10, 1.1e10 }, { 1.1e10, 0. } }},
         {"INF -INF +INF 0"sv, { {doubleLimits::infinity(), -doubleLimits::infinity() }, { doubleLimits::infinity(), 0. } } },
         // Unexpected inputs - document expected behavior
+        {"1 -5.359579389737923e-47 3", { { 1, -0 }, { 3, 0 } }},
         {"2,1 3", { { 2., 0. } } },
         {"2, 3", { { 2., 0. } } },
         {",2 3", { } },
